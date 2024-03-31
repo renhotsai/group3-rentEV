@@ -3,7 +3,7 @@ import { SafeAreaView, View, Text, StyleSheet, Image, TextInput, TouchableOpacit
 import { FIREBASE_AUTH } from '../../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
-const Login = () => {
+const Login = ({ navigation }) => {
     const [form, setForm] = useState({
         email: '',
         password: ''
@@ -15,8 +15,8 @@ const Login = () => {
         setLoading(true);
         try {
             const response = await signInWithEmailAndPassword(auth, form.email, form.password);;       
-            alert("Login successful!");
             // will add navigation
+            navigation.navigate('Home');
         } catch (error) {
             console.error(error);
             alert("Sign in failed: " + error.message); 
