@@ -1,11 +1,29 @@
 import React, { useState } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
+import { FIREBASE_AUTH } from '../../firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const Login = () => {
     const [form, setForm] = useState({
         email: '',
         password: ''
     })
+    const [loading, setLoading] = useState(false); 
+    const auth = FIREBASE_AUTH; 
+
+    const signIn = async () => {
+        setLoading(true);
+        try {
+            const response = await signInWithEmailAndPassword(auth, form.email, form.password);;       
+            alert("Login successful!");
+            // will add navigation
+        } catch (error) {
+            console.error(error);
+            alert("Sign in failed: " + error.message); 
+        } finally {
+            setLoading(false); 
+        }
+    }
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#e8ecf4'}}>
@@ -45,14 +63,13 @@ const Login = () => {
                             placeholder="********"
                             placeholderTextColor="#6b7280"
                             value={form.password}
-                            onChangeText={email => setForm({...form, password })}
+                            onChangeText={password => setForm({...form, password })}
+                            secureTextEntry={true}
                         />
                     </View>
 
                     <View style={styles.formAction}>
-                        <TouchableOpacity onPress={() => {
-
-                        }}>
+                        <TouchableOpacity onPress={signIn}>
                             <View style={styles.btn}>
                                 <Text style={styles.btnText}>Sign in</Text>
                             </View>
