@@ -9,9 +9,8 @@ const firebaseConfig = {
   projectId: "react-native-rental-project",
   storageBucket: "react-native-rental-project.appspot.com",
   messagingSenderId: "119088695948",
-  appId: "1:119088695948:web:2de4586df1c446190b89a9"
+  appId: "1:119088695948:web:8200da0e9ab5acb40b89a9"
 };
-
 
 const app = initializeApp(firebaseConfig);
 

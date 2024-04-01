@@ -1,61 +1,17 @@
-import {db} from "../firebaseConfig"
-import { collection, getDocs, query, where, deleteDoc, updateDoc } from "firebase/firestore";
+import { useState } from "react";
+import { db } from "../firebaseConfig"
+import { collection, getDocs, query, where, deleteDoc, updateDoc, addDoc, onSnapshot } from "firebase/firestore";
 
 
 
 
-const add = async (studentToInsert) => {
+const add = async (itemToInsert) => {
     try {
-        // insert into database
-        // Add a new document with a generated id.
-        const insertedDocument = await addDoc(collection(db, "students"), studentToInsert);
+        console.log(`start add item. ${JSON.stringify(itemToInsert)}`)
+
+        const insertedDocument = await addDoc(collection(db, "Vehicles"), itemToInsert)
+        console.log("Document written with ID: ", insertedDocument.id);
         // display success message
-        console.log("Document written with ID: ", insertedDocument.id);            
-        alert(`done! ${insertedDocument.id}`)
-    } catch (err) {
-        console.log(err)
-    }
-}
-
-
-const delDec = async (studentToDelete) =>{
-    try {
-        await deleteDoc(doc(db,"collection","id"))
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-
-const update = async (studentToUpdate) =>{
-    try {
-        const docRef = doc(db,"collection","docId")
-        await updateDoc(docRef,studentToUpdate)
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-
-const selectAll = async () => {
-    // retrieve data from firestore
-    try {
-        const querySnapshot = await getDocs(collection(db, "students"));
-        
-        const resultsFromFirestore = []        
-        querySnapshot.forEach((doc) => {              
-            console.log(doc.id, " => ", doc.data());
-            // make the object to add to the array
-            const itemToAdd = {
-                id: doc.id, 
-                ...doc.data()
-            }
-            // append to array
-            resultsFromFirestore.push(itemToAdd)                                                
-        });
-
-        console.log("What is in our final array")
-        console.log(resultsFromFirestore)
 
     } catch (err) {
         console.log(err)
@@ -63,7 +19,51 @@ const selectAll = async () => {
 }
 
 
-const btnGetStudentsPressed = async (name) => {
+const delDoc = async (studentToDelete) => {
+    try {
+        await deleteDoc(doc(db, "collection", "id"))
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+
+const update = async (studentToUpdate) => {
+    try {
+        const docRef = doc(db, "collection", "docId")
+        await updateDoc(docRef, studentToUpdate)
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+
+// const selectAll = async () => {
+//     // retrieve data from firestore
+//     try {
+//         const q = query(collection(db, "Vehicles"))
+
+//         const querySnapshot = await getDocs(q);
+//         const temp = []
+//         querySnapshot.forEach((doc) => {
+//             // doc.data() is never undefined for query doc snapshots
+//             console.log(doc.id, " => ", doc.data());
+//             const item = {
+//                 id: doc.id,
+//                 ...doc.data()
+//             }
+//             temp.push(item)
+//         });
+//         vehicles = temp
+//         return temp
+//     } catch (err) {
+//         console.log(err)
+//     }
+// }
+
+
+
+const select = async (name) => {
     const q = query(collection(db, "students"), where("name", "==", name));
 
     try {
@@ -73,13 +73,15 @@ const btnGetStudentsPressed = async (name) => {
         let temp = []
         querySnapshot.forEach((doc) => {
             temp.push({
-                id:doc.id,
+                id: doc.id,
                 ...doc.data()
             })
         });
         // 2. update the state variable with the contents of the temp array
-        setStudentsList(temp)
-    } catch(err) {
+        return temp
+    } catch (err) {
         console.log(err);
     }
 }
+
+export { add, delDoc, update, select }
