@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
 import { FIREBASE_AUTH } from '../../firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { fetchDataFromFirestore } from '../../firebaseHelper';
 
 const Login = ({ navigation }) => {
     const [form, setForm] = useState({
@@ -11,6 +12,13 @@ const Login = ({ navigation }) => {
     const [loading, setLoading] = useState(false); 
     const auth = FIREBASE_AUTH; 
 
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = fetchDataFromFirestore();
+            console.log(data);
+        }
+        fetchData();
+    }, []);
     const signIn = async () => {
         setLoading(true);
         try {
