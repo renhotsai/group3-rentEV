@@ -2,7 +2,6 @@ import { StyleSheet, Text, View, } from 'react-native'
 import React, { Component } from 'react'
 import VehicleListView from './VehicleListView';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
 import AddVehicleView from './AddVehicleView';
 import ProfileView from './ProfileView';
@@ -18,10 +17,10 @@ const MainView = () => {
                         if (route.name == "Cars") {
                             return <AntDesign name="car" size={24} color="black" />
                         }
-                        if(route.name =="Add"){
+                        if (route.name == "Add") {
                             return <AntDesign name="pluscircleo" size={24} color="black" />
                         }
-                        if(route.name =="Profile"){
+                        if (route.name == "Profile") {
                             return <AntDesign name="profile" size={24} color="black" />
                         }
                     },
@@ -31,7 +30,7 @@ const MainView = () => {
             >
                 <Tab.Screen name="Cars" component={VehicleListView} />
                 <Tab.Screen name="Add" component={AddVehicleView} />
-                <Tab.Screen name='Profile' component={ ProfileView}/>
+                <Tab.Screen name='Profile' component={ProfileView} />
             </Tab.Navigator>
     );
 }

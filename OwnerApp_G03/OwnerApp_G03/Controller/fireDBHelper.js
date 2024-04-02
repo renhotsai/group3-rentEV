@@ -1,23 +1,30 @@
-import { useState } from "react";
 import { db } from "../firebaseConfig"
-import { collection, getDocs, query, where, deleteDoc, updateDoc, addDoc, onSnapshot } from "firebase/firestore";
+import { collection, getDocs, query, where, deleteDoc, updateDoc, addDoc, onSnapshot, doc, getDoc, setDoc } from "firebase/firestore";
 
 
-
-
-const add = async (itemToInsert) => {
+const add = async (itemToInsert,col) => {
     try {
         console.log(`start add item. ${JSON.stringify(itemToInsert)}`)
 
-        const insertedDocument = await addDoc(collection(db, "Vehicles"), itemToInsert)
+        const insertedDocument = await addDoc(collection(db, col), itemToInsert)
         console.log("Document written with ID: ", insertedDocument.id);
+        return insertedDocument
         // display success message
-
     } catch (err) {
         console.log(err)
     }
 }
 
+const addUser = async (itemToInsert,col) => {
+    try {
+        console.log(`start add item. ${JSON.stringify(itemToInsert)}`)
+        const insertedDocument = await setDoc(doc(db, col, itemToInsert.email.toLowerCase()), itemToInsert)
+        console.log("Document written with ID: ", insertedDocument.id);
+        // display success message
+    } catch (err) {
+        console.log(err)
+    }
+}
 
 const delDoc = async (studentToDelete) => {
     try {
@@ -28,60 +35,35 @@ const delDoc = async (studentToDelete) => {
 }
 
 
-const update = async (studentToUpdate) => {
+const update = async (itemToUpdate,col,docId) => {
     try {
-        const docRef = doc(db, "collection", "docId")
-        await updateDoc(docRef, studentToUpdate)
+        console.log(`start to update...`);
+        console.log(`col:${col},docId:${docId}`);
+        const docRef = doc(db, col, docId)
+
+        await updateDoc(docRef, itemToUpdate)
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+
+const select = async (docId, col) => {
+    try {
+        console.log(`docID: ${docId}, col:${col}`);
+        const docRef = doc(db,col,docId)
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          console.log("Document data:", docSnap.data());
+          return docSnap
+        } else {
+          // docSnap.data() will be undefined in this case
+          console.log("No such document!");
+        }
     } catch (err) {
         console.log(err);
     }
 }
 
-
-// const selectAll = async () => {
-//     // retrieve data from firestore
-//     try {
-//         const q = query(collection(db, "Vehicles"))
-
-//         const querySnapshot = await getDocs(q);
-//         const temp = []
-//         querySnapshot.forEach((doc) => {
-//             // doc.data() is never undefined for query doc snapshots
-//             console.log(doc.id, " => ", doc.data());
-//             const item = {
-//                 id: doc.id,
-//                 ...doc.data()
-//             }
-//             temp.push(item)
-//         });
-//         vehicles = temp
-//         return temp
-//     } catch (err) {
-//         console.log(err)
-//     }
-// }
-
-
-
-const select = async (name) => {
-    const q = query(collection(db, "students"), where("name", "==", name));
-
-    try {
-        const querySnapshot = await getDocs(q);
-
-        // 1. make temp array for this results
-        let temp = []
-        querySnapshot.forEach((doc) => {
-            temp.push({
-                id: doc.id,
-                ...doc.data()
-            })
-        });
-        // 2. update the state variable with the contents of the temp array
-        return temp
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-export { add, delDoc, update, select }
+export { addUser, add, delDoc, update, select }
