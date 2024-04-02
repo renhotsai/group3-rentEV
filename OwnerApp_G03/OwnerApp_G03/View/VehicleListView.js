@@ -1,7 +1,7 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
-import { db } from '../firebaseConfig'
-import { } from '../Controller/fireDBHelper'
+import { auth, db } from '../firebaseConfig'
+import { select } from '../Controller/fireDBHelper'
 import { collection, onSnapshot } from 'firebase/firestore'
 
 const VehicleListView = () => {
@@ -24,14 +24,21 @@ const VehicleListView = () => {
 
     const [vehicleList, setVehicleList] = useState([])
 
- 
+    const [userList, setUserList] = useState([])
 
-    useEffect(()=>{
+    useEffect(() => {
+        select(auth.currentUser.email, "Owners").then((item) => {
+            const userLiist = vehicleList.filter(vehicle => item.data().carList.includes(vehicle.id))
+            setUserList(userLiist)
+        })
+    }, [vehicleList])
+
+    useEffect(() => {
         const unsubscribe = onSnapshot(collection(db, "Vehicles"), (querySnapshot) => {
             const temp = [];
             querySnapshot.forEach((doc) => {
                 const vehicle = {
-                    id:doc.id,
+                    id: doc.id,
                     ...doc.data()
                 }
                 temp.push(vehicle)
@@ -39,15 +46,15 @@ const VehicleListView = () => {
             setVehicleList(temp)
         });
 
-        return()=>{
+        return () => {
             unsubscribe()
         }
-    },[])
+    }, [])
 
     return (
         <View>
             <FlatList
-                data={vehicleList}
+                data={userList}
                 key={(item) => { return item.id }}
                 renderItem={(item) => renderCarItem(item)}
             />
