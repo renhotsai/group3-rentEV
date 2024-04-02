@@ -12,9 +12,7 @@ const LoginView = (props) => {
     const [password, setPassword] = useState("")
 
     const onLoginClicked = () => {
-        console.log(`email:${email}, password: ${password}`);
         signin(email, password).then(() => {
-            console.log(auth.currentUser);
             if (auth.currentUser !== null) {
                 props.login(true)
             }

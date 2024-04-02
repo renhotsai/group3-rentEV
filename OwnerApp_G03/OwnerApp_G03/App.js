@@ -10,8 +10,6 @@ const App = () => {
   const [isLogin, setIsLogin] = useState(false)
   const [isSignup, setIsSignUp] = useState(false)
 
-  console.log(`isLogin:${isLogin}`)
-  console.log(`isSignup${isSignup}`);
   return (
       <NavigationContainer>
         {

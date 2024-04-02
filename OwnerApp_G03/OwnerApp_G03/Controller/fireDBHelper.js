@@ -50,12 +50,10 @@ const update = async (itemToUpdate,col,docId) => {
 
 const select = async (docId, col) => {
     try {
-        console.log(`docID: ${docId}, col:${col}`);
         const docRef = doc(db,col,docId)
         const docSnap = await getDoc(docRef);
 
         if (docSnap.exists()) {
-          console.log("Document data:", docSnap.data());
           return docSnap
         } else {
           // docSnap.data() will be undefined in this case
