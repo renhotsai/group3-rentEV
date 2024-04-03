@@ -1,10 +1,10 @@
-import { Alert, Pressable, Text, TextInput, View } from 'react-native'
+import { Alert, Pressable, Text, TextInput, View, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { add, select, update } from '../Controller/fireDBHelper';
 import { auth } from '../firebaseConfig';
 import RNPickerSelect from 'react-native-picker-select'
 
-const AddVehicleView = ({ navigation }) => {
+const EditVehicleView = ({ navigation, route }) => {
 
     // for new Vehicle
     const [makeFromUI, setMakeFromUI] = useState("")
@@ -23,9 +23,9 @@ const AddVehicleView = ({ navigation }) => {
     const [trims, setTrims] = useState([])
 
     // option default
-    const [defaultMake, setDefaultMake] = useState("")
-    const [defaultModel, setDefaultModel] = useState("")
-    const [defaultTrim, setDefaultTrim] = useState("")
+    const [defaultMake, setDefaultMake] = useState(route.params.item.make)
+    const [defaultModel, setDefaultModel] = useState(route.params.item.model)
+    const [defaultTrim, setDefaultTrim] = useState(route.params.item.trim)
 
     const makePickers = (items) => {
         const temp = []
@@ -56,7 +56,7 @@ const AddVehicleView = ({ navigation }) => {
 
 
     useEffect(() => {
-        setDefaultModel("")
+        // setDefaultModel("")
         const data = []
         apiData.forEach(item => {
             if (item.make === makeFromUI) {
@@ -77,7 +77,7 @@ const AddVehicleView = ({ navigation }) => {
 
 
     useEffect(() => {
-        setDefaultTrim("")
+        // setDefaultTrim("")
         const data = []
         apiData.forEach(item => {
             if (item.make === makeFromUI && item.model === modelFromUI) {
@@ -151,7 +151,6 @@ const AddVehicleView = ({ navigation }) => {
     return (
         <View>
             <RNPickerSelect
-
                 value={defaultMake !== "" ? defaultMake : makes.length > 0 ? makes[0].value : ""}
                 onValueChange={(value) => {
                     setMakeFromUI(value)
@@ -161,7 +160,7 @@ const AddVehicleView = ({ navigation }) => {
             />
             <RNPickerSelect
                 value={defaultModel !== "" ? defaultModel : models.length > 0 ? models[0].value : ""}
-                onValueChange={(value)=>{
+                onValueChange={(value) => {
                     setModelFromUI(value)
                     setDefaultModel(value)
                 }}
@@ -169,7 +168,7 @@ const AddVehicleView = ({ navigation }) => {
             />
             <RNPickerSelect
                 value={defaultTrim !== "" ? defaultTrim : trims.length > 0 ? trims[0].value : ""}
-                onValueChange={(value)=>{
+                onValueChange={(value) => {
                     setTrimFromUI(value)
                     setDefaultTrim(value)
                 }}
@@ -185,10 +184,12 @@ const AddVehicleView = ({ navigation }) => {
 
 
             <Pressable onPress={addVehicle}>
-                <Text>Add</Text>
+                <Text>Edit</Text>
             </Pressable>
         </View>
     )
 }
 
-export default AddVehicleView
+export default EditVehicleView
+
+const styles = StyleSheet.create({})
