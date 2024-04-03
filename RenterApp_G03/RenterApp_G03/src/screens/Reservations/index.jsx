@@ -1,16 +1,11 @@
 import React from 'react'; 
 import { View, Text, StyleSheet, Button } from 'react-native'; 
 
-const Home = ({navigation}) => {
-    const navigationToRes = () => {
-        navigation.navigate('Reservations')
-    }
-
-
+const Reservations = () => {
+    
     return (
         <View style={styles.container}> 
-            <Text>This will be the search page</Text>
-            <Button title="Link to Reservations" onPress={navigationToRes}></Button>
+            <Text>This will be the Reservations page</Text>
         </View>
     )
 }
@@ -24,4 +19,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Home;
+export default Reservations;
