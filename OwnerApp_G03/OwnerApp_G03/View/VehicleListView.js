@@ -4,7 +4,7 @@ import { auth, db } from '../firebaseConfig'
 import { select } from '../Controller/fireDBHelper'
 import { collection, onSnapshot } from 'firebase/firestore'
 
-const VehicleListView = () => {
+const VehicleListView = ({ navigation, route }) => {
 
     const renderCarItem = ({ item }) => {
         return (
@@ -37,6 +37,7 @@ const VehicleListView = () => {
         const unsubscribe = onSnapshot(collection(db, "Vehicles"), (querySnapshot) => {
             const temp = [];
             querySnapshot.forEach((doc) => {
+                console.log(`doc:${doc.id}`);
                 const vehicle = {
                     id: doc.id,
                     ...doc.data()
@@ -49,7 +50,9 @@ const VehicleListView = () => {
         return () => {
             unsubscribe()
         }
-    }, [])
+    })
+
+
 
     return (
         <View>

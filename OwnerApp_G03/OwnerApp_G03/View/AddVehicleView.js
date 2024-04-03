@@ -1,10 +1,10 @@
-import { Pressable, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, Pressable, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
 import { add, select, update } from '../Controller/fireDBHelper';
 import { auth } from '../firebaseConfig';
 import RNPickerSelect from 'react-native-picker-select'
 
-const AddVehicleView = () => {
+const AddVehicleView = ({ navigation, route }) => {
 
     // for new Vehicle
     const [makeFromUI, setMakeFromUI] = useState("")
@@ -185,11 +185,12 @@ const AddVehicleView = () => {
         // console.log(`start update...`);
 
         await update(ownerData, "Owners", owner.id)
+        Alert.alert("Success!")
+        navigation.navigate('Main')
     }
 
     return (
         <View>
-            <Text>AddVehicleView</Text>
             <RNPickerSelect
 
                 value={ defaultMake !== ""  ? defaultMake : makes.length > 0 ? makes[0].value : "" }

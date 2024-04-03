@@ -14,13 +14,13 @@ const LoginView = (props) => {
     const onLoginClicked = () => {
         signin(email, password).then(() => {
             if (auth.currentUser !== null) {
-                props.login(true)
+                props.changeScreen("Main")
             }
 
         })
     }
     const onSignUpClicked = () => {
-        props.signup(true)
+        props.changeScreen("SignUp")
     }
 
     return (
