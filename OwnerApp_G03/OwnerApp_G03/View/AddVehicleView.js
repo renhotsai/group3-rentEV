@@ -23,13 +23,13 @@ const AddVehicleView = ({ navigation, route }) => {
     const [models, setModels] = useState([])
     const [trims, setTrims] = useState([])
     const [seats, setSeats] = useState([])
-    
+
     // option default
     const [defaultMake, setDefaultMake] = useState("")
-    const [defaultModel,setDefaultModel] = useState("")
-    const [defaultTrim,setDefaultTrim] = useState("")
-    const [defaultSeat,setDefaultSeat] = useState("")
-    
+    const [defaultModel, setDefaultModel] = useState("")
+    const [defaultTrim, setDefaultTrim] = useState("")
+    const [defaultSeat, setDefaultSeat] = useState("")
+
     const makePickers = (items) => {
         const temp = []
         items.forEach(item => {
@@ -43,7 +43,7 @@ const AddVehicleView = ({ navigation, route }) => {
     }
 
 
-    
+
     useEffect(() => {
         const temp = apiData.filter((item, index) => {
             const firstIndex = apiData.findIndex(obj => obj.make === item.make);
@@ -55,16 +55,14 @@ const AddVehicleView = ({ navigation, route }) => {
         });
         setMakes(makePickers(list))
     }, [apiData])
-    
-    
+
+
 
     useEffect(() => {
         setDefaultModel("")
-        console.log(`make data change ${makeFromUI}`);
         const data = []
         apiData.forEach(item => {
             if (item.make === makeFromUI) {
-                // console.log(item.model);
                 data.push(item)
             }
         })
@@ -80,10 +78,9 @@ const AddVehicleView = ({ navigation, route }) => {
         setModels(makePickers(list))
     }, [makeFromUI])
 
-    
+
     useEffect(() => {
         setDefaultTrim("")
-        console.log(`model data change`);
         const data = []
         apiData.forEach(item => {
             if (item.make === makeFromUI && item.model === modelFromUI) {
@@ -100,45 +97,15 @@ const AddVehicleView = ({ navigation, route }) => {
             list.push(item.trim)
         })
         setTrims(makePickers(list))
+        if (temp[0] !== undefined) {
+            setSeatFromUI(temp[0].seats_min.toString())
+        }
     }, [modelFromUI])
-    
-    
-    useEffect(() => {
-        setDefaultSeat("")
-        console.log(`trim data change`);
-        const data = []
-        apiData.forEach(item => {
-            if (item.make === makeFromUI && item.model === modelFromUI && item.trim === trimFromUI) {
-                data.push(item)
-            }
-        })
-
-        const list = []
-        data.forEach(item => {
-            if (item.seats_min !== null) {
-                // console.log(item.seats_min);
-                list.push(item.seats_min.toString())
-            }
-            if (item.seats_max !== null) {
-                // console.log(item.seats_max);
-                list.push(item.seats_max.toString())
-            }
-        })
-
-        const temp = list.filter((item, index) => {
-            const firstIndex = list.findIndex(obj => obj === item);
-            return index === firstIndex;
-        })
-
-        console.log(`seat temp:${JSON.stringify(temp)}`);
-        setSeats(makePickers(temp))
-    }, [trimFromUI])
 
 
     const vehicleDataFromAPI = () => {
         const apiURL = 'https://renhotsai.github.io/Vehicles/'
         fetch(apiURL).then((response) => {
-            //console.log(`response: ${JSON.stringify(response)}`);
             if (response.ok) {
                 const jsonData = response.json()
                 return jsonData
@@ -148,10 +115,7 @@ const AddVehicleView = ({ navigation, route }) => {
         })
             .then((apiData) => {
                 if (apiData !== undefined) {
-                    // console.log(`json data from API is available: ${JSON.stringify(apiData)}`);
                     setApiData(apiData)
-                } else {
-                    // console.log(`no data from API`);
                 }
             })
             .catch((err) => {
@@ -182,7 +146,6 @@ const AddVehicleView = ({ navigation, route }) => {
         const ownerData = owner.data()
         ownerData.carList.push(vehicle.id)
 
-        // console.log(`start update...`);
 
         await update(ownerData, "Owners", owner.id)
         Alert.alert("Success!")
@@ -193,29 +156,25 @@ const AddVehicleView = ({ navigation, route }) => {
         <View>
             <RNPickerSelect
 
-                value={ defaultMake !== ""  ? defaultMake : makes.length > 0 ? makes[0].value : "" }
-                onValueChange={(value)=>{
-                  setMakeFromUI(value)
-                  setDefaultMake(value)  
+                value={defaultMake !== "" ? defaultMake : makes.length > 0 ? makes[0].value : ""}
+                onValueChange={(value) => {
+                    setMakeFromUI(value)
+                    setDefaultMake(value)
                 }}
                 items={makes}
             />
             <RNPickerSelect
-                value={ defaultModel !== "" ? defaultModel : models.length > 0 ? models[0].value : ""}
+                value={defaultModel !== "" ? defaultModel : models.length > 0 ? models[0].value : ""}
                 onValueChange={setModelFromUI}
                 items={models}
             />
             <RNPickerSelect
-                value={ defaultTrim !== "" ? defaultTrim : trims.length > 0 ? trims[0].value : ""}
+                value={defaultTrim !== "" ? defaultTrim : trims.length > 0 ? trims[0].value : ""}
                 onValueChange={setTrimFromUI}
                 items={trims}
             />
-            <RNPickerSelect
-                value={defaultSeat !== "" ? defaultSeat : seats.length > 0 ? seats[0].value : ""}
-                onValueChange={setSeatFromUI}
-                items={seats}
-            />
 
+            <TextInput placeholder='seats' onChangeText={setSeatFromUI} value={seatFromUI} />
             <TextInput placeholder='License Plate' onChangeText={setLicensePlateFromUI} value={licensePlateFromUI} />
             <TextInput placeholder='Capacity' onChangeText={setCapacityFromUI} value={capacityFromUI} />
             <TextInput placeholder='Price' onChangeText={setPriceFromUI} value={priceFromUI} />
