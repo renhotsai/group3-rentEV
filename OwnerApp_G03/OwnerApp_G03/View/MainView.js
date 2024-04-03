@@ -7,6 +7,7 @@ import AddVehicleView from './AddVehicleView';
 import ProfileView from './ProfileView';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeView from './HomeView';
+import EditVehicleView from './EditVehicleView';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,7 +19,8 @@ const MainView = ({ navigation, route }) => {
     return (
         <Stack.Navigator>
             <Stack.Screen name='Main' component={HomeView} options={{headerShown:false}}/>
-            <Stack.Screen name='Add Vehicle' component={AddVehicleView}/>
+            <Stack.Screen name='AddVehicle' component={AddVehicleView} options={{title:"Add Vehicle"}}/>
+            <Stack.Screen name='EditVehicle' component={EditVehicleView} options={{title:"Edit Vehicle"}} />
         </Stack.Navigator>
     );
 }

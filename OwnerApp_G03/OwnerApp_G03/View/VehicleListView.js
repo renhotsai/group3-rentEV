@@ -1,41 +1,63 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
 import { auth, db } from '../firebaseConfig'
 import { select } from '../Controller/fireDBHelper'
-import { collection, onSnapshot } from 'firebase/firestore'
+import { collection, doc, onSnapshot } from 'firebase/firestore'
 
 const VehicleListView = ({ navigation, route }) => {
 
     const renderCarItem = ({ item }) => {
         return (
             <View>
-                <Text>{item.id}</Text>
-                <Text>{item.imageName}</Text>
-                <Text>{item.model}</Text>
-                <Text>{item.licensePlate}</Text>
-                <Text>{item.capacity}</Text>
-                <Text>{item.isRent ? "rent" : ""}</Text>
-                <Text>{item.price}</Text>
-                <Text>{item.address}</Text>
-                <Text>{item.brand}</Text>
+                <Pressable onPress={()=>onDetailPress(item)}>
+                    <Text>{item.make} {item.model} {item.trim}</Text>
+                    <Text>Seats: {item.seat}</Text>
+                    <Text>{item.imageName}</Text>
+                    <Text>{item.licensePlate}</Text>
+                    <Text>{item.capacity}</Text>
+                    <Text>{item.isRent ? "rent" : ""}</Text>
+                    <Text>{item.price}</Text>
+                    <Text>{item.address}</Text>
+                </Pressable>
             </View>
         )
     }
 
+    const onDetailPress = (item) =>{
+
+        navigation.navigate("EditVehicle",{item:item})
+    }
+
+
     const [vehicleList, setVehicleList] = useState([])
 
+    const [user, setUser] = useState({})
     const [userList, setUserList] = useState([])
+
+    const updateUserList = () => {
+        const temp = vehicleList.filter(vehicle => user.carList.includes(vehicle.id))
+        setUserList(temp)
+    }
+
+    useEffect(() => {
+        updateUserList()
+    }, [vehicleList, user])
 
     useEffect(() => {
         try {
-            select(auth.currentUser.email, "Owners").then((item) => {
-                const userLiist = vehicleList.filter(vehicle => item.data().carList.includes(vehicle.id))
-                setUserList(userLiist)
-            })
-        } catch (err) {
-            console.error(`err:${err}`);
+            const unsubscribe = onSnapshot(doc(db, "Owners", auth.currentUser.email), { includeMetadataChanges: true }, (doc) => {
+                setUser(doc.data())
+
+            });
+
+            return () => {
+                unsubscribe()
+            }
         }
-    }, [vehicleList])
+        catch (err) {
+            console.error(err);
+        }
+    }, [])
 
     useEffect(() => {
         try {
@@ -49,6 +71,7 @@ const VehicleListView = ({ navigation, route }) => {
                     temp.push(vehicle)
                 });
                 setVehicleList(temp)
+
             });
 
             return () => {
@@ -58,7 +81,7 @@ const VehicleListView = ({ navigation, route }) => {
         catch (err) {
             console.error(err);
         }
-    })
+    }, [])
 
 
 

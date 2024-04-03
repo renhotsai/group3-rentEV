@@ -8,7 +8,7 @@ import ProfileView from "./ProfileView";
 const HomeView = ({navigation}) => {
 
     const onAddPress = () => {
-        navigation.navigate('Add Vehicle')
+        navigation.navigate('AddVehicle')
     }
 
     const Tab = createBottomTabNavigator();
