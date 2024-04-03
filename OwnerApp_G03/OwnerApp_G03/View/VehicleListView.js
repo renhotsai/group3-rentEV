@@ -27,28 +27,36 @@ const VehicleListView = ({ navigation, route }) => {
     const [userList, setUserList] = useState([])
 
     useEffect(() => {
-        select(auth.currentUser.email, "Owners").then((item) => {
-            const userLiist = vehicleList.filter(vehicle => item.data().carList.includes(vehicle.id))
-            setUserList(userLiist)
-        })
+        try {
+            select(auth.currentUser.email, "Owners").then((item) => {
+                const userLiist = vehicleList.filter(vehicle => item.data().carList.includes(vehicle.id))
+                setUserList(userLiist)
+            })
+        } catch (err) {
+            console.error(`err:${err}`);
+        }
     }, [vehicleList])
 
     useEffect(() => {
-        const unsubscribe = onSnapshot(collection(db, "Vehicles"), (querySnapshot) => {
-            const temp = [];
-            querySnapshot.forEach((doc) => {
-                console.log(`doc:${doc.id}`);
-                const vehicle = {
-                    id: doc.id,
-                    ...doc.data()
-                }
-                temp.push(vehicle)
+        try {
+            const unsubscribe = onSnapshot(collection(db, "Vehicles"), (querySnapshot) => {
+                const temp = [];
+                querySnapshot.forEach((doc) => {
+                    const vehicle = {
+                        id: doc.id,
+                        ...doc.data()
+                    }
+                    temp.push(vehicle)
+                });
+                setVehicleList(temp)
             });
-            setVehicleList(temp)
-        });
 
-        return () => {
-            unsubscribe()
+            return () => {
+                unsubscribe()
+            }
+        }
+        catch (err) {
+            console.error(err);
         }
     })
 
