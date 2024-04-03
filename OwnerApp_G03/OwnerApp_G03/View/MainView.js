@@ -1,37 +1,25 @@
-import { StyleSheet, Text, View, } from 'react-native'
-import React, { Component } from 'react'
+import { Pressable, StyleSheet, Text, View, } from 'react-native'
+import React, { Component, useEffect } from 'react'
 import VehicleListView from './VehicleListView';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign } from '@expo/vector-icons';
 import AddVehicleView from './AddVehicleView';
 import ProfileView from './ProfileView';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeView from './HomeView';
 
 const Tab = createBottomTabNavigator();
 
 
-const MainView = () => {
+const MainView = ({ navigation, route }) => {
+
+    const Stack = createNativeStackNavigator();
+
     return (
-            <Tab.Navigator
-                screenOptions={({ route }) => ({
-                    tabBarIcon: ({ focused, color, size }) => {
-                        if (route.name == "Cars") {
-                            return <AntDesign name="car" size={24} color="black" />
-                        }
-                        if (route.name == "Add") {
-                            return <AntDesign name="pluscircleo" size={24} color="black" />
-                        }
-                        if (route.name == "Profile") {
-                            return <AntDesign name="profile" size={24} color="black" />
-                        }
-                    },
-                    tabBarActiveTintColor: 'tomato',
-                    tabBarInactiveTintColor: 'gray',
-                })}
-            >
-                <Tab.Screen name="Cars" component={VehicleListView} />
-                <Tab.Screen name="Add" component={AddVehicleView} />
-                <Tab.Screen name='Profile' component={ProfileView} />
-            </Tab.Navigator>
+        <Stack.Navigator>
+            <Stack.Screen name='Main' component={HomeView} options={{headerShown:false}}/>
+            <Stack.Screen name='Add Vehicle' component={AddVehicleView}/>
+        </Stack.Navigator>
     );
 }
 

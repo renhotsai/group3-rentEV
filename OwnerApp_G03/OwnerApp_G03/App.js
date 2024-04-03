@@ -4,20 +4,35 @@ import LoginView from './View/LoginView'
 import { useEffect, useState } from 'react';
 import SignUpView from './View/SignUpView';
 import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const App = () => {
 
   const [isLogin, setIsLogin] = useState(false)
   const [isSignup, setIsSignUp] = useState(false)
 
+
+  const [screen, setScreen] = useState("Login")
+
+  const Stack = createNativeStackNavigator();
+
+
   return (
-      <NavigationContainer>
-        {
-          isLogin ? (<MainView />) :
-            isSignup ? (<SignUpView login={setIsLogin} />) :
-              (<LoginView signup={setIsSignUp} login={setIsLogin} />)
+    <NavigationContainer>
+
+      {(() => {
+        switch (screen) {
+          case "Login":
+            return <LoginView changeScreen={setScreen} />;
+          case "SignUp":
+            return <SignUpView changeScreen={setScreen} />;
+          case "Main":
+            return <MainView />;
+          default:
+            return null; // Or render a default component if needed
         }
-      </NavigationContainer>
+      })()}
+    </NavigationContainer>
   )
 }
 
