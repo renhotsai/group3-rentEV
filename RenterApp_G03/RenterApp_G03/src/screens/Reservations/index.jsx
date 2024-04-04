@@ -38,7 +38,7 @@ const Reservations = () => {
                     console.log("Removed order: ", change.doc.data());
                 }
             });
-            setReservationData(tempList)
+            setReservationData(tempList) 
         });
     }
 
@@ -55,36 +55,39 @@ const Reservations = () => {
             <View style={styles.infoCarDetsWrapper}>
                 <Text style={styles.infoResStatus}>{item.status}</Text>
                 <Image 
-                    source={require('../../../assets/carImgs/car1.png')}
+                    source={{  uri: item?.vehicleImg[0] }}
                     style={styles.resItemImg}
                 />
                 <View style={styles.resInfoContainer}>
-                    <Text style={styles.infoTitle}>Audi A4</Text>
+                    <Text style={styles.infoTitle}>{item.vehicleName}</Text>
                     <View style={styles.infoResOwnerWrapper}>
                         <Image 
                             source={require('../../../assets/profilePics/profile1.jpg')}
                             style={styles.profilePic}
                         />
-                        <Text style={styles.infoSmTitle}>Ray Rentals</Text>
-                    </View>
-                    
+                        <Text style={styles.infoSmTitle}>{item.vehicleOwnerName}</Text>
+                    </View>    
                 </View>
             </View>
             <View style={styles.infoResDetsRow1}>
                 <View style={styles.infoResDetsCol1}>
                     <Text style={styles.infoSubtitle}>LIC No.</Text>
-                    <Text style={styles.infoSmTitle}>CBPC 344</Text>
+                    <Text style={styles.infoSmTitle}>{item.vehicleLicenseNo}</Text>
                     <View style={{marginTop: 16}}>
                         <Text style={styles.infoSubtitle}>Price</Text>
-                        <Text style={styles.infoSmTitle}>$180.00</Text>
+                        <Text style={styles.infoSmTitle}>${item.price}</Text>
                     </View>
                 </View>
                 <View style={{width: '60%'}}>
                     <Text style={styles.infoSubtitle}>Pickup Location</Text>
-                    <Text style={styles.infoSmTitle}>1 Yonge St</Text>
+                    <Text style={styles.infoSmTitle}>{item.pickUpAddress}</Text>
                     <View style={{marginTop: 16}}>
                         <Text style={styles.infoSubtitle}>Booking Date</Text>
-                        <Text style={styles.infoSmTitle}>April 4, 2024</Text>
+                        <Text style={styles.infoSmTitle}>
+                            {
+                                getDate(item.bookingDate)
+                            }
+                        </Text>
                     </View>
                 </View>
             </View>
@@ -98,6 +101,14 @@ const Reservations = () => {
             </View> 
         </View>
     )
+
+    const getDate = (time) => {
+        const timestamp = time.seconds * 1000 + Math.floor(time.nanoseconds / 1000000); // Combine seconds and nanoseconds to get milliseconds
+        const date = new Date(timestamp);
+        const formattedDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        console.log(formattedDate); // Output: April 15, 2024
+        return formattedDate
+    }
 
     useEffect(()=>{
         console.log("SCREEN HAS LOADED")
@@ -151,7 +162,7 @@ const styles = StyleSheet.create({
         fontSize: 18, 
         fontWeight: '600',
         color: '#222',
-        marginTop: 8
+        marginTop: 24
     },
     infoSmTitle: {
         fontSize: 16, 
@@ -212,7 +223,6 @@ const styles = StyleSheet.create({
         alignContent:"stretch",
         width:"100%",
         padding: 24,
-        
     },
 })
 
