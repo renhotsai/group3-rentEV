@@ -14,7 +14,6 @@ const SignUpView = (props) => {
     
     const onCancelClicked = () => {
             props.changeScreen("Login");
-
     }
 
   const onSignUpClicked = () => {
@@ -30,12 +29,6 @@ const SignUpView = (props) => {
         };
 
         addUser(newUser, "Owners")
-          .then(() => {
-            props.login(true);
-          })
-          .catch((error) => {
-            console.error("Error adding user:", error);
-          });
       })
       .catch((error) => {
         console.error("Error signing up:", error);

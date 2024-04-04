@@ -1,19 +1,34 @@
-// ProfileView.js
 import React, { useEffect, useState } from "react";
 import { Text, View, Image, Pressable } from "react-native";
 import { styles } from "./styles";
 import { select } from "../Controller/fireDBHelper";
 import { auth } from "../firebaseConfig";
-
-const ProfileView = () => {
+const ProfileView = ({ navigation }) => {
   const [user, setUser] = useState({});
-
+  const [carLength, setCarLength] = useState(0);
+  const [orderLength, setOrderLength] = useState(0);
   useEffect(() => {
     select(auth.currentUser.email, "Owners").then((item) => {
       setUser(item.data());
+      if (item.data().carList) {
+        setCarLength(item.data().carList.length);
+      }
+      if (item.data().orderList) {
+        setOrderLength(item.data().orderList.length);
+      }
     });
   }, []);
-
+  const handleLogout = () => {
+    auth
+      .signOut()
+      .then(() => {
+        // Navigate to login page after logout
+            navigation.navigate("Login", { screen: "Login", resetStack: true });
+      })
+      .catch((error) => {
+        console.error("Error signing out: ", error);
+      });
+  };
   return (
     <View style={styles.container}>
       <Image
@@ -34,16 +49,19 @@ const ProfileView = () => {
         <Text style={styles.detailLabel}>Email:</Text>
         <Text style={styles.detailValue}>{user.email}</Text>
       </View>
-      <View style={[styles.detailContainer, styles.marginBottom]}>
+      <View style={styles.detailContainer}>
+        <Text style={styles.detailLabel}>Number of Cars:</Text>
+        <Text style={styles.detailValue}>{carLength}</Text>
+      </View>
+      <View style={styles.detailContainer}>
+        <Text style={styles.detailLabel}>Number of Orders:</Text>
+        <Text style={styles.detailValue}>{orderLength}</Text>
+      </View>
+      <View style={styles.detailContainer}>
         <Text style={styles.detailLabel}>Phone:</Text>
         <Text style={styles.detailValue}>{user.phone}</Text>
       </View>
-
-      {/* <Pressable style={styles.button}>
-        <Text style={styles.buttonText}>Edit Profile</Text>
-      </Pressable> */}
     </View>
   );
 };
-
 export default ProfileView;
