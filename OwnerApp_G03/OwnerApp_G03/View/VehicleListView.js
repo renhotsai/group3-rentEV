@@ -1,7 +1,8 @@
-import { FlatList, Image, Pressable, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Pressable, Image, StyleSheet, Text, View } from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
 import { auth, db } from '../firebaseConfig'
 import { collection, doc, onSnapshot } from 'firebase/firestore'
+import { styles } from './styles'
 
 const VehicleListView = ({ navigation, route }) => {
 
@@ -38,7 +39,7 @@ const VehicleListView = ({ navigation, route }) => {
 
 
     const onDetailPress = (item) =>{
-        navigation.navigate("EditVehicle",{item:item})
+        navigation.navigate("VehicleDetails",{item:item})
     }
 
 
@@ -111,6 +112,4 @@ const VehicleListView = ({ navigation, route }) => {
 
 export default VehicleListView
 
-const styles = StyleSheet.create({
 
-});

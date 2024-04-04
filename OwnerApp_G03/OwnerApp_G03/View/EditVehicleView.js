@@ -1,135 +1,136 @@
-import { Alert, Pressable, Text, TextInput, View, StyleSheet, FlatList, Image } from 'react-native'
+import { Alert, Pressable, Text, TextInput, View, StyleSheet, FlatList, Image, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { add, select, update } from '../Controller/fireDBHelper';
 import { auth, db } from '../firebaseConfig';
 import RNPickerSelect from 'react-native-picker-select'
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore'
+import { styles } from './styles';
+import { pickerArrow } from './pickerArrow';
 
 const EditVehicleView = ({ navigation, route }) => {
+  const data = route.params.item;
+  // for new Vehicle
+  const [makeFromUI, setMakeFromUI] = useState("");
+  const [modelFromUI, setModelFromUI] = useState("");
+  const [trimFromUI, setTrimFromUI] = useState("");
+  const [seatFromUI, setSeatFromUI] = useState(data.seat);
+  const [licensePlateFromUI, setLicensePlateFromUI] = useState(
+    data.licensePlate
+  );
+  const [capacityFromUI, setCapacityFromUI] = useState(data.capacity);
+  const [priceFromUI, setPriceFromUI] = useState(data.price);
+  const [addressFromUI, setAddressFromUI] = useState(data.address);
+  const [imageUrlFromUI, setImageUrlFromUI] = useState([]);
 
-    const data = route.params.item
-    // for new Vehicle
-    const [makeFromUI, setMakeFromUI] = useState("")
-    const [modelFromUI, setModelFromUI] = useState("");
-    const [trimFromUI, setTrimFromUI] = useState("");
-    const [seatFromUI, setSeatFromUI] = useState(data.seat);
-    const [licensePlateFromUI, setLicensePlateFromUI] = useState(data.licensePlate);
-    const [priceFromUI, setPriceFromUI] = useState(data.price);
-    const [addressFromUI, setAddressFromUI] = useState(data.address);
-    const [imageUrlFromUI, setImageUrlFromUI] = useState([])
+  // option array
+  const [apiData, setApiData] = useState([]);
+  const [makes, setMakes] = useState([]);
+  const [models, setModels] = useState([]);
+  const [trims, setTrims] = useState([]);
 
-    // option array
-    const [apiData, setApiData] = useState([])
-    const [makes, setMakes] = useState([])
-    const [models, setModels] = useState([])
-    const [trims, setTrims] = useState([])
+  // option default
+  const [defaultMake, setDefaultMake] = useState(route.params.item.make);
+  const [defaultModel, setDefaultModel] = useState(route.params.item.model);
+  const [defaultTrim, setDefaultTrim] = useState(route.params.item.trim);
 
-    // option default
-    const [defaultMake, setDefaultMake] = useState(route.params.item.make)
-    const [defaultModel, setDefaultModel] = useState(route.params.item.model)
-    const [defaultTrim, setDefaultTrim] = useState(route.params.item.trim)
+  const makePickers = (items) => {
+    const temp = [];
+    items.forEach((item) => {
+      const pickerOption = {
+        label: item,
+        value: item,
+      };
+      temp.push(pickerOption);
+    });
+    return temp;
+  };
 
-    const makePickers = (items) => {
-        const temp = []
-        items.forEach(item => {
-            const pickerOption = {
-                label: item,
-                value: item,
-            }
-            temp.push(pickerOption)
-        });
-        return temp;
+  useEffect(() => {
+    const temp = apiData.filter((item, index) => {
+      const firstIndex = apiData.findIndex((obj) => obj.make === item.make);
+      return index === firstIndex;
+    });
+    const list = [];
+    temp.forEach((item) => {
+      list.push(item.make);
+    });
+    setMakes(makePickers(list));
+  }, [apiData]);
+
+  useEffect(() => {
+    // setDefaultModel("")
+    const data = [];
+    apiData.forEach((item) => {
+      if (item.make === makeFromUI) {
+        data.push(item);
+      }
+    });
+
+    const temp = data.filter((item, index) => {
+      const firstIndex = data.findIndex((obj) => obj.model === item.model);
+      return index === firstIndex;
+    });
+    const list = [];
+    temp.forEach((item) => {
+      list.push(item.model);
+    });
+    setModels(makePickers(list));
+  }, [makeFromUI]);
+
+  useEffect(() => {
+    // setDefaultTrim("")
+    const data = [];
+    apiData.forEach((item) => {
+      if (item.make === makeFromUI && item.model === modelFromUI) {
+        data.push(item);
+      }
+    });
+
+    const temp = data.filter((item, index) => {
+      const firstIndex = data.findIndex((obj) => obj.trim === item.trim);
+      return index === firstIndex;
+    });
+    const list = [];
+    temp.forEach((item) => {
+      list.push(item.trim);
+    });
+    setTrims(makePickers(list));
+    if (temp[0] !== undefined) {
+      console.log(`${JSON.stringify(temp[0])}`);
+      const temp2 = [];
+      temp[0].images.forEach((item) => {
+        temp2.push(item.url_thumbnail);
+      });
+      setImageUrlFromUI(temp2);
     }
+  }, [modelFromUI]);
 
-
-
-    useEffect(() => {
-        const temp = apiData.filter((item, index) => {
-            const firstIndex = apiData.findIndex(obj => obj.make === item.make);
-            return index === firstIndex;
-        })
-        const list = []
-        temp.forEach(item => {
-            list.push(item.make)
-        });
-        setMakes(makePickers(list))
-    }, [apiData])
-
-
-
-    useEffect(() => {
-        // setDefaultModel("")
-        const data = []
-        apiData.forEach(item => {
-            if (item.make === makeFromUI) {
-                data.push(item)
-            }
-        })
-
-        const temp = data.filter((item, index) => {
-            const firstIndex = data.findIndex(obj => obj.model === item.model);
-            return index === firstIndex;
-        })
-        const list = []
-        temp.forEach(item => {
-            list.push(item.model)
-        });
-        setModels(makePickers(list))
-    }, [makeFromUI])
-
-
-    useEffect(() => {
-        // setDefaultTrim("")
-        const data = []
-        apiData.forEach(item => {
-            if (item.make === makeFromUI && item.model === modelFromUI) {
-                data.push(item)
-            }
-        })
-
-        const temp = data.filter((item, index) => {
-            const firstIndex = data.findIndex(obj => obj.trim === item.trim);
-            return index === firstIndex;
-        })
-        const list = []
-        temp.forEach(item => {
-            list.push(item.trim)
-        })
-        setTrims(makePickers(list))
-        if (temp[0] !== undefined) {
-            console.log(`${JSON.stringify(temp[0])}`);
-            const temp2 =[]
-            temp[0].images.forEach(item => {
-                temp2.push(item.url_thumbnail)
-            })
-            setImageUrlFromUI(temp2)
+  const vehicleDataFromAPI = () => {
+    const apiURL = "https://renhotsai.github.io/Vehicles/";
+    fetch(apiURL)
+      .then((response) => {
+        if (response.ok) {
+          const jsonData = response.json();
+          return jsonData;
+        } else {
+          console.error(
+            `Unsuccessful response from server. Status code: ${response.status}`
+          );
         }
-    }, [modelFromUI])
+      })
+      .then((apiData) => {
+        if (apiData !== undefined) {
+          setApiData(apiData);
+        }
+      })
+      .catch((err) => {
+        console.error(`error: ${err}`);
+      });
+  };
 
-
-    const vehicleDataFromAPI = () => {
-        const apiURL = 'https://renhotsai.github.io/Vehicles/'
-        fetch(apiURL).then((response) => {
-            if (response.ok) {
-                const jsonData = response.json()
-                return jsonData
-            } else {
-                console.error(`Unsuccessful response from server. Status code: ${response.status}`);
-            }
-        })
-            .then((apiData) => {
-                if (apiData !== undefined) {
-                    setApiData(apiData)
-                }
-            })
-            .catch((err) => {
-                console.error(`error: ${err}`);
-            })
-    }
-
-    useEffect(() => {
-        vehicleDataFromAPI()
-    }, [])
+  useEffect(() => {
+    vehicleDataFromAPI();
+  }, []);
 
     const editVehicle = async () => {
       // Input validation
@@ -168,6 +169,7 @@ const EditVehicleView = ({ navigation, route }) => {
     };
 
     return (
+      <ScrollView>
         <View style={styles.container}>
           <FlatList
             data={imageUrlFromUI}
@@ -288,7 +290,8 @@ const EditVehicleView = ({ navigation, route }) => {
             <Text style={styles.buttonText}>Save</Text>
           </Pressable>
         </View>
-    )
-}
+      </ScrollView>
+    );
+};
 
 export default EditVehicleView

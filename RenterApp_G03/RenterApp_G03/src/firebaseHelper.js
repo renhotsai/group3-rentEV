@@ -63,7 +63,7 @@ export const createOrder = async (vehicle) => {
     console.log("Document written with ID: ", docRef.id)
 
     // add vehicle id in userDocument to rentals collection's orderList array
-    const orderList = userDocument.data().orderList ?? []
+    const orderList = userDocument.data().orderList
     orderList.push(vehicle.id)
     await updateDoc(doc(FIRESTORE_DB, "Rentals", userEmail), {
       orderList: orderList,
@@ -76,6 +76,7 @@ export const createOrder = async (vehicle) => {
 
     ownerItem.forEach(async (doc) => {
       try {
+        // Update the document's orderList field with docRef.id
         await updateDoc(doc.ref, {
           orderList: [...doc.data().orderList, docRef.id],
         })

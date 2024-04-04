@@ -9,6 +9,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeView from './HomeView';
 import EditVehicleView from './EditVehicleView';
 import OrderDetailView from './OrderDetailView';
+import VehicleDetailsView from './VehicleDetailsView';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,22 +19,37 @@ const MainView = ({ navigation, route }) => {
     const Stack = createNativeStackNavigator();
 
     return (
-        <Stack.Navigator>
-            <Stack.Screen name='Main' component={HomeView} options={{headerShown:false}}/>
-            <Stack.Screen name='AddVehicle' component={AddVehicleView} options={{title:"Add Vehicle"}}/>
-            <Stack.Screen name='EditVehicle' component={EditVehicleView} options={{title:"Edit Vehicle"}} />
-            <Stack.Screen name='OrderDetail' component={OrderDetailView} options={{title:"Order Detail"}} />
-        </Stack.Navigator>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Main"
+          component={HomeView}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AddVehicle"
+          component={AddVehicleView}
+          options={{ title: "Add Vehicle" }}
+        />
+        <Stack.Screen
+          name="VehicleDetails"
+          component={VehicleDetailsView}
+          options={{ title: "Car Details" }}
+        />
+
+        <Stack.Screen
+          name="EditVehicle"
+          component={EditVehicleView}
+          options={{ title: "Edit Vehicle" }}
+        />
+        <Stack.Screen
+          name="OrderDetail"
+          component={OrderDetailView}
+          options={{ title: "Order Detail" }}
+        />
+      </Stack.Navigator>
     );
 }
 
 export default MainView
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
+

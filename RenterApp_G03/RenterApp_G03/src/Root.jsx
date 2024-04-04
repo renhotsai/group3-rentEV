@@ -11,7 +11,7 @@ const Stack = createNativeStackNavigator()
 const TopTabsGroup = () => {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Map" component={Home} />
+      <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Reservations" component={Reservations} />
     </Tab.Navigator>
   )
