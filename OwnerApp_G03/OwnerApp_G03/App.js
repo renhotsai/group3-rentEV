@@ -7,7 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const App = () => {
-  const [screen, setScreen] = useState("Login")
+  const [screen, setScreen] = useState("Main")
   return (
     <NavigationContainer>
 

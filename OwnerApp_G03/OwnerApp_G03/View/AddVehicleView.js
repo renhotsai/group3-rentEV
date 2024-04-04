@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { add, select, update } from '../Controller/fireDBHelper';
 import { auth } from '../firebaseConfig';
 import RNPickerSelect from 'react-native-picker-select'
+import { styles } from "./styles";
+import { pickerArrow } from './pickerArrow';
+
 
 const AddVehicleView = ({ navigation }) => {
 
@@ -163,52 +166,138 @@ const AddVehicleView = ({ navigation }) => {
         )
     }
 
+    
     return (
-        <View>
-            <RNPickerSelect
+      <ScrollView>
+        <View style={styles.container}>
+          <FlatList
+            data={imageUrlFromUI}
+            style={styles.marginBottom}
+            horizontal={true}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <Image source={{ uri: item }} style={styles.img} />
+            )}
+          />
 
-                value={defaultMake !== "" ? defaultMake : makes.length > 0 ? makes[0].value : ""}
-                onValueChange={(value) => {
-                    setMakeFromUI(value)
-                    setDefaultMake(value)
-                }}
-                items={makes}
-            />
-            <RNPickerSelect
-                value={defaultModel !== "" ? defaultModel : models.length > 0 ? models[0].value : ""}
-                onValueChange={(value) => {
-                    setModelFromUI(value)
-                    setDefaultModel(value)
-                }}
-                items={models}
-            />
-            <RNPickerSelect
-                value={defaultTrim !== "" ? defaultTrim : trims.length > 0 ? trims[0].value : ""}
-                onValueChange={(value) => {
-                    setTrimFromUI(value)
-                    setDefaultTrim(value)
-                }}
-                items={trims}
-            />
+          <Text style={styles.label}>Make</Text>
+          <RNPickerSelect
+            value={
+              defaultMake !== ""
+                ? defaultMake
+                : makes.length > 0
+                ? makes[0].value
+                : ""
+            }
+            onValueChange={(value) => {
+              setMakeFromUI(value);
+              setDefaultMake(value);
+            }}
+            items={makes}
+            style={{
+              inputIOS: {
+                ...styles.input,
+                ...styles.pickerStyle,
+              },
+              iconContainer: {
+                ...styles.pickerContainer,
+              },
+            }}
+            Icon={pickerArrow}
+          />
+          <Text style={styles.label}>Model</Text>
+          <RNPickerSelect
+            value={
+              defaultModel !== ""
+                ? defaultModel
+                : models.length > 0
+                ? models[0].value
+                : ""
+            }
+            onValueChange={(value) => {
+              setModelFromUI(value);
+              setDefaultModel(value);
+            }}
+            items={models}
+            style={{
+              inputIOS: {
+                ...styles.input,
+                ...styles.pickerStyle,
+              },
+              iconContainer: {
+                ...styles.pickerContainer,
+              },
+            }}
+            Icon={pickerArrow}
+          />
+          <Text style={styles.label}>Trim</Text>
+          <RNPickerSelect
+            value={
+              defaultTrim !== ""
+                ? defaultTrim
+                : trims.length > 0
+                ? trims[0].value
+                : ""
+            }
+            onValueChange={(value) => {
+              setTrimFromUI(value);
+              setDefaultTrim(value);
+            }}
+            items={trims}
+            style={{
+              inputIOS: {
+                ...styles.input,
+                ...styles.pickerStyle,
+              },
+              iconContainer: {
+                ...styles.pickerContainer,
+              },
+            }}
+            Icon={pickerArrow}
+          />
 
-            <TextInput placeholder='seats' onChangeText={setSeatFromUI} value={seatFromUI} />
-            <TextInput placeholder='License Plate' onChangeText={setLicensePlateFromUI} value={licensePlateFromUI} />
-            <TextInput placeholder='Capacity' onChangeText={setCapacityFromUI} value={capacityFromUI} />
-            <TextInput placeholder='Price' onChangeText={setPriceFromUI} value={priceFromUI} />
-            <TextInput placeholder='Address' onChangeText={setAddressFromUI} value={addressFromUI} />
+          <Text style={styles.label}>Seats</Text>
+          <TextInput
+            placeholder="Seats"
+            onChangeText={setSeatFromUI}
+            value={seatFromUI.toString()}
+            style={styles.input}
+          />
+          <Text style={styles.label}>License Plate</Text>
+          <TextInput
+            placeholder="License Plate"
+            onChangeText={setLicensePlateFromUI}
+            value={licensePlateFromUI}
+            style={styles.input}
+          />
+          <Text style={styles.label}>Capacity</Text>
+          <TextInput
+            placeholder="Capacity"
+            onChangeText={setCapacityFromUI}
+            value={capacityFromUI}
+            style={styles.input}
+          />
+          <Text style={styles.label}>Price</Text>
+          <TextInput
+            placeholder="Price"
+            onChangeText={setPriceFromUI}
+            value={priceFromUI}
+            style={styles.input}
+          />
+          <Text style={styles.label}>Address</Text>
+          <TextInput
+            placeholder="Address"
+            onChangeText={setAddressFromUI}
+            value={addressFromUI}
+            style={[styles.input, styles.marginBottom]}
+          />
 
-            <FlatList
-                data={imageUrlFromUI}
-                horizontal={true}
-                key={(item) => { return item.id }}
-                renderItem={({item}) => (<Image source={{ uri: item }} style={{ height: 100, width: 100 }} />)}
-            />
-
-            <Pressable onPress={addVehicle}>
-                <Text>Add</Text>
-            </Pressable>
+          <Pressable style={styles.button} onPress={addVehicle}>
+            <Text style={styles.buttonText}>Add</Text>
+          </Pressable>
         </View>
-    )
+      </ScrollView>
+    );
 }
 
 export default AddVehicleView

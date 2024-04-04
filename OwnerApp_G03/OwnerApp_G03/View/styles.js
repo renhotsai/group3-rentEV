@@ -18,8 +18,9 @@ export const styles = StyleSheet.create({
     width: "100%",
     height: 40,
     borderColor: "#ddd",
+    fontSize: 16,
     borderWidth: 1,
-    marginBottom: 20,
+    marginBottom: 10,
     paddingHorizontal: 10,
     borderRadius: 8,
   },
@@ -54,11 +55,29 @@ export const styles = StyleSheet.create({
     height: 80,
     alignSelf: "center",
   },
+  img: {
+    minWidth: 340,
+    minHeight: 200,
+    alignSelf: "center",
+    margin: 5,
+  },
+  marginBottom: {
+    marginBottom: 20,
+  },
   subtitle: {
     fontSize: 14,
     fontWeight: "bold",
     alignSelf: "center",
     marginBottom: 30,
-    
+  },
+  pickerStyle: {
+    paddingVertical: 10,
+    paddingLeft: 12,
+    paddingRight: 30,
+  },
+  pickerContainer: {
+    top: "50%",
+    right: 12,
+    transform: [{ translateY: -8 }],
   },
 });
