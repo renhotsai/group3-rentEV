@@ -24,7 +24,6 @@ const VehicleListView = ({ navigation, route }) => {
     }
 
     const onDetailPress = (item) =>{
-
         navigation.navigate("EditVehicle",{item:item})
     }
 

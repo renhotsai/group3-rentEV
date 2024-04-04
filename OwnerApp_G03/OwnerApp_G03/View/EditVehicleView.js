@@ -1,20 +1,23 @@
-import { Alert, Pressable, Text, TextInput, View, StyleSheet } from 'react-native'
+import { Alert, Pressable, Text, TextInput, View, StyleSheet, FlatList, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { add, select, update } from '../Controller/fireDBHelper';
-import { auth } from '../firebaseConfig';
+import { auth, db } from '../firebaseConfig';
 import RNPickerSelect from 'react-native-picker-select'
+import { doc, setDoc } from 'firebase/firestore';
 
 const EditVehicleView = ({ navigation, route }) => {
 
+    const data = route.params.item
     // for new Vehicle
     const [makeFromUI, setMakeFromUI] = useState("")
     const [modelFromUI, setModelFromUI] = useState("");
     const [trimFromUI, setTrimFromUI] = useState("");
-    const [seatFromUI, setSeatFromUI] = useState("");
-    const [licensePlateFromUI, setLicensePlateFromUI] = useState("");
-    const [capacityFromUI, setCapacityFromUI] = useState("");
-    const [priceFromUI, setPriceFromUI] = useState("");
-    const [addressFromUI, setAddressFromUI] = useState("");
+    const [seatFromUI, setSeatFromUI] = useState(data.seat);
+    const [licensePlateFromUI, setLicensePlateFromUI] = useState(data.licensePlate);
+    const [capacityFromUI, setCapacityFromUI] = useState(data.capacity);
+    const [priceFromUI, setPriceFromUI] = useState(data.price);
+    const [addressFromUI, setAddressFromUI] = useState(data.address);
+    const [imageUrlFromUI, setImageUrlFromUI] = useState([])
 
     // option array
     const [apiData, setApiData] = useState([])
@@ -95,7 +98,12 @@ const EditVehicleView = ({ navigation, route }) => {
         })
         setTrims(makePickers(list))
         if (temp[0] !== undefined) {
-            setSeatFromUI(temp[0].seats_min.toString())
+            console.log(`${JSON.stringify(temp[0])}`);
+            const temp2 =[]
+            temp[0].images.forEach(item => {
+                temp2.push(item.url_thumbnail)
+            })
+            setImageUrlFromUI(temp2)
         }
     }, [modelFromUI])
 
@@ -126,7 +134,7 @@ const EditVehicleView = ({ navigation, route }) => {
 
     const editVehicle = async () => {
         //Verify
-        const newVehicle = {
+        const updateVehicle = {
             make: makeFromUI,
             model: modelFromUI,
             trim: trimFromUI,
@@ -136,9 +144,10 @@ const EditVehicleView = ({ navigation, route }) => {
             price: priceFromUI,
             address: addressFromUI,
             isRent: false,
+            imageUrl: imageUrlFromUI,
         }
         try {
-            await add(newVehicle, "Vehicles")
+            await setDoc(doc(db, "Vehicles", data.id), updateVehicle)
             Alert.alert("Success!")
             navigation.navigate('Main')
         } catch (err) {
@@ -179,7 +188,12 @@ const EditVehicleView = ({ navigation, route }) => {
             <TextInput placeholder='Price' onChangeText={setPriceFromUI} value={priceFromUI} />
             <TextInput placeholder='Address' onChangeText={setAddressFromUI} value={addressFromUI} />
 
-
+            <FlatList
+                data={imageUrlFromUI}
+                horizontal={true}
+                key={(item) => { return item.id }}
+                renderItem={({item}) => (<Image source={{ uri: item }} style={{ height: 100, width: 100 }} />)}
+            />
 
             <Pressable onPress={editVehicle}>
                 <Text>Edit</Text>

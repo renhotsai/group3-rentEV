@@ -17,18 +17,37 @@ const OrderDetailView = ({ navigation, route }) => {
 
   const updateFireDoc = async (status) => {
     try {
-      await updateDoc(doc(db, "Orders", order.id), {
-        status: status, // "APPROVED" or "DECLINED" or "PENDING"
-      })
+      let updateToDB = {
+        status: status
+      }
+      if (status === "APPROVED") {
+        updateToDB.confirmCode = generateRandomString()
+      }
+
+      await updateDoc(doc(db, "Orders", order.id), updateToDB)
       Alert.alert(`Order ${status}`)
     } catch (err) {
       console.error(err);
     }
   }
 
+  const generateRandomString = () =>{
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    for (let i = 0; i < 6; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+  }  
 
   const onAPPROVEPress = () => {
     updateFireDoc("APPROVED")
+    console.log(`onAPPROVEPress`);
+    updateDoc(doc(db, "Vehicles", order.vehicle), {
+      isRent: true
+    })
+    navigation.goBack()
   }
 
   const onDECLINEDPress = () => {
