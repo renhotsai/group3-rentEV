@@ -26,6 +26,7 @@ const CarListItem = ({ car }) => {
         <Text>Capacity: {car.capacity}</Text>
         <Text>Seat: {car.seat}</Text>
         <Text>License Plate: {car.licensePlate}</Text>
+        <Text>Address: {car.address}</Text>
         <View style={styles.footer}>
           <Text style={styles.price}>$ {car.price}</Text>
           <TouchableOpacity
