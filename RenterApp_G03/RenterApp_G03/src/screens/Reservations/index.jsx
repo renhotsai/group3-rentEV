@@ -134,7 +134,7 @@ const Reservations = () => {
       const unsubscribe = onSnapshot(
         doc(FIRESTORE_DB, "Rentals", FIREBASE_AUTH.currentUser.email), (querySnapshot) => {
           console.log(
-            `rental: ${querySnapshot.data()}`
+            `rental: ${JSON.stringify(querySnapshot.data())}`
           );
         })
     }
