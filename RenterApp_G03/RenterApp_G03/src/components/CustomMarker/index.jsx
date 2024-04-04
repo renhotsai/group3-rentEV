@@ -7,7 +7,6 @@ const CustomMarker = ({ car, onPress }) => {
   const fetchCoordinates = async (address) => {
     try {
       if (address) {
-        console.log(address)
         const getLocation = async () => {
           const location = await Location.geocodeAsync(address)
           const coordinates = {

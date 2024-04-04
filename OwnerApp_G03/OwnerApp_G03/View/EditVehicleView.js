@@ -14,7 +14,6 @@ const EditVehicleView = ({ navigation, route }) => {
     const [trimFromUI, setTrimFromUI] = useState("");
     const [seatFromUI, setSeatFromUI] = useState(data.seat);
     const [licensePlateFromUI, setLicensePlateFromUI] = useState(data.licensePlate);
-    const [capacityFromUI, setCapacityFromUI] = useState(data.capacity);
     const [priceFromUI, setPriceFromUI] = useState(data.price);
     const [addressFromUI, setAddressFromUI] = useState(data.address);
     const [imageUrlFromUI, setImageUrlFromUI] = useState([])
@@ -140,7 +139,6 @@ const EditVehicleView = ({ navigation, route }) => {
             trim: trimFromUI,
             seat: seatFromUI,
             licensePlate: licensePlateFromUI,
-            capacity: capacityFromUI,
             price: priceFromUI,
             address: addressFromUI,
             isRent: false,
@@ -182,9 +180,8 @@ const EditVehicleView = ({ navigation, route }) => {
                 items={trims}
             />
 
-            <TextInput placeholder='seats' onChangeText={setSeatFromUI} value={seatFromUI} />
+            <TextInput placeholder='Seat Capacity' onChangeText={setSeatFromUI} value={seatFromUI} />
             <TextInput placeholder='License Plate' onChangeText={setLicensePlateFromUI} value={licensePlateFromUI} />
-            <TextInput placeholder='Capacity' onChangeText={setCapacityFromUI} value={capacityFromUI} />
             <TextInput placeholder='Price' onChangeText={setPriceFromUI} value={priceFromUI} />
             <TextInput placeholder='Address' onChangeText={setAddressFromUI} value={addressFromUI} />
 

@@ -10,9 +10,6 @@ import {
 import { createOrder } from "../../firebaseHelper"
 
 const CarListItem = ({ car }) => {
-  useEffect(() => {
-    console.log(car)
-  }, [car])
   const handleMakeOrder = async () => {
     try {
       createOrder(car)
@@ -34,7 +31,6 @@ const CarListItem = ({ car }) => {
         <Text style={styles.title}>
           {car.make} {car.model}s
         </Text>
-        <Text>Capacity: {car.capacity}</Text>
         <Text>Seat: {car.seat}</Text>
         <Text>License Plate: {car.licensePlate}</Text>
         <Text>Address: {car.address}</Text>
