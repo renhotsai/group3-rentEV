@@ -138,6 +138,9 @@ export const styles = StyleSheet.create({
   },
   topMargin: {
     marginTop: 20,
+    disabledButton: {
+      opacity: 0.5,
+    },
   },
   map: {
     flex: 1,

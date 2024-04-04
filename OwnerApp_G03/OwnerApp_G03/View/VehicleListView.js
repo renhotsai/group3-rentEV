@@ -1,7 +1,6 @@
 import { FlatList, Pressable, Image, StyleSheet, Text, View } from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
 import { auth, db } from '../firebaseConfig'
-import { select } from '../Controller/fireDBHelper'
 import { collection, doc, onSnapshot } from 'firebase/firestore'
 import { styles } from './styles'
 
@@ -25,7 +24,7 @@ const VehicleListView = ({ navigation, route }) => {
               Make: {item.make} {item.model}
             </Text>
             <Text style={styles.infoText}>
-              Seating Capacity: {item.capacity ? item.capacity : "N/A"}
+              Seating Capacity: {item.seat ? item.seat : "N/A"}
             </Text>
             <Text style={styles.infoText}>
               Availability: {item.isRent ? "Not Available" : "Available"}
@@ -61,8 +60,8 @@ const VehicleListView = ({ navigation, route }) => {
     useEffect(() => {
         try {
             const unsubscribe = onSnapshot(doc(db, "Owners", auth.currentUser.email), (doc) => {
-                setUser(doc.data())
-
+              
+              setUser(doc.data())
             });
 
             return () => {
