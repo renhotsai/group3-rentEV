@@ -4,44 +4,37 @@ import { auth, db } from '../firebaseConfig'
 import { select } from '../Controller/fireDBHelper'
 import { collection, doc, onSnapshot } from 'firebase/firestore'
 
-const VehicleListView = ({ navigation, route }) => {
+
+const OrderListView = ({ navigation, route }) => {
 
     const renderCarItem = ({ item }) => {
         return (
             <View>
                 <Pressable onPress={()=>onDetailPress(item)}>
-                    <Text>{item.make} {item.model} {item.trim}</Text>
-                    <Text>Seats: {item.seat}</Text>
-                    <Text>{item.imageName}</Text>
-                    <Text>{item.licensePlate}</Text>
-                    <Text>{item.capacity}</Text>
-                    <Text>{item.isRent ? "rent" : ""}</Text>
-                    <Text>{item.price}</Text>
-                    <Text>{item.address}</Text>
+                    <Text>{item.id}</Text>
                 </Pressable>
             </View>
         )
     }
 
     const onDetailPress = (item) =>{
-
-        navigation.navigate("EditVehicle",{item:item})
+        navigation.navigate("OrderDetail",{item:item})
     }
 
 
-    const [vehicleList, setVehicleList] = useState([])
+    const [orderList, setOrderList] = useState([])
 
     const [user, setUser] = useState({})
     const [userList, setUserList] = useState([])
 
     const updateUserList = () => {
-        const temp = vehicleList.filter(vehicle => user.carList.includes(vehicle.id))
+        const temp = orderList.filter(order => user.orderList.includes(order.id))
         setUserList(temp)
     }
 
     useEffect(() => {
         updateUserList()
-    }, [vehicleList, user])
+    }, [orderList, user])
 
     useEffect(() => {
         try {
@@ -61,7 +54,7 @@ const VehicleListView = ({ navigation, route }) => {
 
     useEffect(() => {
         try {
-            const unsubscribe = onSnapshot(collection(db, "Vehicles"), (querySnapshot) => {
+            const unsubscribe = onSnapshot(collection(db, "Orders"), (querySnapshot) => {
                 const temp = [];
                 querySnapshot.forEach((doc) => {
                     const vehicle = {
@@ -70,7 +63,7 @@ const VehicleListView = ({ navigation, route }) => {
                     }
                     temp.push(vehicle)
                 });
-                setVehicleList(temp)
+                setOrderList(temp)
 
             });
 
@@ -83,7 +76,7 @@ const VehicleListView = ({ navigation, route }) => {
         }
     }, [])
 
-
+    
 
     return (
         <View>
@@ -96,8 +89,5 @@ const VehicleListView = ({ navigation, route }) => {
     )
 }
 
-export default VehicleListView
+export default OrderListView
 
-const styles = StyleSheet.create({
-
-});

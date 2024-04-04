@@ -3,9 +3,14 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { Pressable } from "react-native";
 import VehicleListView from "./VehicleListView";
 import ProfileView from "./ProfileView";
+import { FontAwesome5 } from '@expo/vector-icons';
+import OrderListView from "./OrderListView";
+import { useEffect, useState } from "react";
+import { collection, doc, getDocs, onSnapshot } from "firebase/firestore";
+import { auth, db } from "../firebaseConfig";
+import { select } from "../Controller/fireDBHelper";
 
-
-const HomeView = ({navigation}) => {
+const HomeView = ({ navigation }) => {
 
     const onAddPress = () => {
         navigation.navigate('AddVehicle')
@@ -22,11 +27,15 @@ const HomeView = ({navigation}) => {
                     if (route.name == "Profile") {
                         return <AntDesign name="profile" size={24} color="black" />
                     }
+                    if (route.name == "Order") {
+                        return <FontAwesome5 name="list" size={24} color="black" />
+                    }
                 },
                 tabBarActiveTintColor: 'tomato',
                 tabBarInactiveTintColor: 'gray',
             })}
         >
+            <Tab.Screen name="Order" component={OrderListView} />
             <Tab.Screen name="Cars" component={VehicleListView} options={{
                 headerRight: () => (
                     <Pressable onPress={onAddPress}>

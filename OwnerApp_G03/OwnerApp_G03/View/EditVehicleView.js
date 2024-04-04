@@ -124,7 +124,7 @@ const EditVehicleView = ({ navigation, route }) => {
         vehicleDataFromAPI()
     }, [])
 
-    const addVehicle = async () => {
+    const editVehicle = async () => {
         //Verify
         const newVehicle = {
             make: makeFromUI,
@@ -137,15 +137,13 @@ const EditVehicleView = ({ navigation, route }) => {
             address: addressFromUI,
             isRent: false,
         }
-        const vehicle = await add(newVehicle, "Vehicles")
-        const owner = await select(auth.currentUser.email, "Owners")
-        const ownerData = owner.data()
-        ownerData.carList.push(vehicle.id)
-
-
-        await update(ownerData, "Owners", owner.id)
-        Alert.alert("Success!")
-        navigation.navigate('Main')
+        try {
+            await add(newVehicle, "Vehicles")
+            Alert.alert("Success!")
+            navigation.navigate('Main')
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     return (
@@ -183,7 +181,7 @@ const EditVehicleView = ({ navigation, route }) => {
 
 
 
-            <Pressable onPress={addVehicle}>
+            <Pressable onPress={editVehicle}>
                 <Text>Edit</Text>
             </Pressable>
         </View>
