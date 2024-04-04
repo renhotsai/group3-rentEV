@@ -43,6 +43,11 @@ const OrderDetailView = ({ navigation, route }) => {
 
   const onAPPROVEPress = () => {
     updateFireDoc("APPROVED")
+    console.log(`onAPPROVEPress`);
+    updateDoc(doc(db, "Vehicles", order.vehicle), {
+      isRent: true
+    })
+    navigation.goBack()
   }
 
   const onDECLINEDPress = () => {
