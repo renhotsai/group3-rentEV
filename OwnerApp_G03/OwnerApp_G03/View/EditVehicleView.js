@@ -1,20 +1,22 @@
 import { Alert, Pressable, Text, TextInput, View, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { add, select, update } from '../Controller/fireDBHelper';
-import { auth } from '../firebaseConfig';
+import { auth, db } from '../firebaseConfig';
 import RNPickerSelect from 'react-native-picker-select'
+import { doc, setDoc } from 'firebase/firestore';
 
 const EditVehicleView = ({ navigation, route }) => {
 
+    const data = route.params.item
     // for new Vehicle
     const [makeFromUI, setMakeFromUI] = useState("")
     const [modelFromUI, setModelFromUI] = useState("");
     const [trimFromUI, setTrimFromUI] = useState("");
-    const [seatFromUI, setSeatFromUI] = useState("");
-    const [licensePlateFromUI, setLicensePlateFromUI] = useState("");
-    const [capacityFromUI, setCapacityFromUI] = useState("");
-    const [priceFromUI, setPriceFromUI] = useState("");
-    const [addressFromUI, setAddressFromUI] = useState("");
+    const [seatFromUI, setSeatFromUI] = useState(data.seat);
+    const [licensePlateFromUI, setLicensePlateFromUI] = useState(data.licensePlate);
+    const [capacityFromUI, setCapacityFromUI] = useState(data.capacity);
+    const [priceFromUI, setPriceFromUI] = useState(data.price);
+    const [addressFromUI, setAddressFromUI] = useState(data.address);
 
     // option array
     const [apiData, setApiData] = useState([])
@@ -94,9 +96,9 @@ const EditVehicleView = ({ navigation, route }) => {
             list.push(item.trim)
         })
         setTrims(makePickers(list))
-        if (temp[0] !== undefined) {
-            setSeatFromUI(temp[0].seats_min.toString())
-        }
+        // if (temp[0] !== undefined) {
+        //     setSeatFromUI(temp[0].seats_min.toString())
+        // }
     }, [modelFromUI])
 
 
@@ -138,7 +140,7 @@ const EditVehicleView = ({ navigation, route }) => {
             isRent: false,
         }
         try {
-            await add(newVehicle, "Vehicles")
+            await setDoc(doc(db, "Vehicles", data.id), newVehicle)
             Alert.alert("Success!")
             navigation.navigate('Main')
         } catch (err) {

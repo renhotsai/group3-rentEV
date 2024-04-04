@@ -1,4 +1,4 @@
-import { Alert, Pressable, Text, TextInput, View } from 'react-native'
+import { Alert, FlatList, Image, Pressable, ScrollView, Text, TextInput, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { add, select, update } from '../Controller/fireDBHelper';
 import { auth } from '../firebaseConfig';
@@ -21,6 +21,7 @@ const AddVehicleView = ({ navigation }) => {
     const [makes, setMakes] = useState([])
     const [models, setModels] = useState([])
     const [trims, setTrims] = useState([])
+    const [images, setImages] = useState([])
 
     // option default
     const [defaultMake, setDefaultMake] = useState("")
@@ -97,6 +98,10 @@ const AddVehicleView = ({ navigation }) => {
         if (temp[0] !== undefined) {
             setSeatFromUI(temp[0].seats_min.toString())
         }
+        if (temp[0] !== undefined) {
+            console.log(`${JSON.stringify(temp[0].images)}`);
+            setImages(temp[0].images)
+        }
     }, [modelFromUI])
 
 
@@ -148,6 +153,12 @@ const AddVehicleView = ({ navigation }) => {
         navigation.navigate('Main')
     }
 
+    const renderItem = (item) => {
+        return (
+            <Image source={{ uri: item.url_full }} style={{ height: 100, width: 100 }} />
+        )
+    }
+
     return (
         <View>
             <RNPickerSelect
@@ -161,7 +172,7 @@ const AddVehicleView = ({ navigation }) => {
             />
             <RNPickerSelect
                 value={defaultModel !== "" ? defaultModel : models.length > 0 ? models[0].value : ""}
-                onValueChange={(value)=>{
+                onValueChange={(value) => {
                     setModelFromUI(value)
                     setDefaultModel(value)
                 }}
@@ -169,7 +180,7 @@ const AddVehicleView = ({ navigation }) => {
             />
             <RNPickerSelect
                 value={defaultTrim !== "" ? defaultTrim : trims.length > 0 ? trims[0].value : ""}
-                onValueChange={(value)=>{
+                onValueChange={(value) => {
                     setTrimFromUI(value)
                     setDefaultTrim(value)
                 }}
@@ -182,7 +193,12 @@ const AddVehicleView = ({ navigation }) => {
             <TextInput placeholder='Price' onChangeText={setPriceFromUI} value={priceFromUI} />
             <TextInput placeholder='Address' onChangeText={setAddressFromUI} value={addressFromUI} />
 
-
+            <FlatList
+                data={images}
+                horizontal={true}
+                key={(item) => { return item.id }}
+                renderItem={({item}) => (<Image source={{ uri: item.url_full }} style={{ height: 100, width: 100 }} />)}
+            />
 
             <Pressable onPress={addVehicle}>
                 <Text>Add</Text>
