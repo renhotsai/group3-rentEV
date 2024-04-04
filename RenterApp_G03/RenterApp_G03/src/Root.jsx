@@ -11,7 +11,7 @@ const Root = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                {/* <Stack.Screen name="Login" component={Login} initialParams={{defaultScreen: true }} options={{headerShown: false}}/>   */}
+                <Stack.Screen name="Login" component={Login} initialParams={{defaultScreen: true }} options={{headerShown: false}}/>  
                 <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
                 <Stack.Screen name="Reservations" component={Reservations}/>
             </Stack.Navigator>
