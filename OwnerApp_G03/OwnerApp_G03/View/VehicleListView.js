@@ -14,7 +14,6 @@ const VehicleListView = ({ navigation, route }) => {
                     <Text>Seats: {item.seat}</Text>
                     <Text>{item.imageName}</Text>
                     <Text>{item.licensePlate}</Text>
-                    <Text>{item.capacity}</Text>
                     <Text>{item.isRent ? "rent" : ""}</Text>
                     <Text>{item.price}</Text>
                     <Text>{item.address}</Text>
