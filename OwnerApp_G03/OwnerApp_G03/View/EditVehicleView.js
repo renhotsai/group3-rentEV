@@ -132,28 +132,43 @@ const EditVehicleView = ({ navigation, route }) => {
     vehicleDataFromAPI();
   }, []);
 
-  const editVehicle = async () => {
-    //Verify
-    const updateVehicle = {
-      make: makeFromUI,
-      model: modelFromUI,
-      trim: trimFromUI,
-      seat: seatFromUI,
-      licensePlate: licensePlateFromUI,
-      capacity: capacityFromUI,
-      price: priceFromUI,
-      address: addressFromUI,
-      isRent: false,
-      imageUrl: imageUrlFromUI,
+    const editVehicle = async () => {
+      // Input validation
+      if (
+        !makeFromUI ||
+        !modelFromUI ||
+        !trimFromUI ||
+        !seatFromUI ||
+        !licensePlateFromUI ||
+        !capacityFromUI ||
+        !priceFromUI ||
+        !addressFromUI
+      ) {
+        Alert.alert("Error", "Please fill in all fields");
+        return;
+      }
+
+      //Verify
+      const updateVehicle = {
+        make: makeFromUI,
+        model: modelFromUI,
+        trim: trimFromUI,
+        seat: seatFromUI,
+        licensePlate: licensePlateFromUI,
+        capacity: capacityFromUI,
+        price: priceFromUI,
+        address: addressFromUI,
+        isRent: false,
+        imageUrl: imageUrlFromUI,
+      };
+      try {
+        await setDoc(doc(db, "Vehicles", data.id), updateVehicle);
+        Alert.alert("Success!");
+        navigation.navigate("Main");
+      } catch (err) {
+        console.error(err);
+      }
     };
-    try {
-      await setDoc(doc(db, "Vehicles", data.id), updateVehicle);
-      Alert.alert("Success!");
-      navigation.navigate("Main");
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
     return (
       <ScrollView>
@@ -281,7 +296,7 @@ const EditVehicleView = ({ navigation, route }) => {
           />
 
           <Pressable style={styles.button} onPress={editVehicle}>
-            <Text style={styles.buttonText}>Edit</Text>
+            <Text style={styles.buttonText}>Save</Text>
           </Pressable>
         </View>
       </ScrollView>

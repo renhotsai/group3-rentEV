@@ -60,6 +60,15 @@ export const styles = StyleSheet.create({
     minHeight: 200,
     alignSelf: "center",
     margin: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 2, height: 5 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  ListImg: {
+    width: 160,
+    height: 120,
   },
   marginBottom: {
     marginBottom: 20,
@@ -80,4 +89,55 @@ export const styles = StyleSheet.create({
     right: 12,
     transform: [{ translateY: -8 }],
   },
+  listItemContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 10,
+    backgroundColor: "#fff",
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+
+  imageContainer: {
+    marginHorizontal: 15,
+  },
+  infoContainer: {
+    flex: 1,
+    marginLeft: 15,
+  },
+  infoText: {
+    marginBottom: 5,
+  },
+  detailContainer: {
+    flexDirection: "colum",
+    marginBottom: 10,
+    minWidth: "50%",
+  },
+  detailRow: {
+    flexDirection: "row",
+    marginBottom: 10,
+    marginLeft: 5,
+  },
+  detailLabel: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  detailValue: {
+    fontSize: 16,
+  },
+  profileImg:{
+    width:200,
+    height: 200,
+    alignSelf: "center",
+    marginBottom: 20,
+  },
+  topMargin: {
+    marginTop : 20
+  }
+
 });

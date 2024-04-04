@@ -136,28 +136,42 @@ const AddVehicleView = ({ navigation }) => {
     }, [])
 
     const addVehicle = async () => {
-        //Verify
-        const newVehicle = {
-            make: makeFromUI,
-            model: modelFromUI,
-            trim: trimFromUI,
-            seat: seatFromUI,
-            licensePlate: licensePlateFromUI,
-            capacity: capacityFromUI,
-            price: priceFromUI,
-            address: addressFromUI,
-            isRent: false,
-            imageUrl: imageUrlFromUI,
-        }
-        const vehicle = await add(newVehicle, "Vehicles")
-        const owner = await select(auth.currentUser.email, "Owners")
-        const ownerData = owner.data()
-        ownerData.carList.push(vehicle.id)
+      // Input validation
+      if (
+        !makeFromUI ||
+        !modelFromUI ||
+        !trimFromUI ||
+        !seatFromUI ||
+        !licensePlateFromUI ||
+        !capacityFromUI ||
+        !priceFromUI ||
+        !addressFromUI
+      ) {
+        Alert.alert("Error", "Please fill in all fields");
+        return;
+      }
 
+      //Verify
+      const newVehicle = {
+        make: makeFromUI,
+        model: modelFromUI,
+        trim: trimFromUI,
+        seat: seatFromUI,
+        licensePlate: licensePlateFromUI,
+        capacity: capacityFromUI,
+        price: priceFromUI,
+        address: addressFromUI,
+        isRent: false,
+        imageUrl: imageUrlFromUI,
+      };
+      const vehicle = await add(newVehicle, "Vehicles");
+      const owner = await select(auth.currentUser.email, "Owners");
+      const ownerData = owner.data();
+      ownerData.carList.push(vehicle.id);
 
-        await update(ownerData, "Owners", owner.id)
-        Alert.alert("Success!")
-        navigation.navigate('Main')
+      await update(ownerData, "Owners", owner.id);
+      Alert.alert("Success!");
+      navigation.navigate("Main");
     }
 
     const renderItem = (item) => {

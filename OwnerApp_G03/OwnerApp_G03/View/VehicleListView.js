@@ -1,30 +1,46 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Pressable, Image, StyleSheet, Text, View } from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
 import { auth, db } from '../firebaseConfig'
 import { select } from '../Controller/fireDBHelper'
 import { collection, doc, onSnapshot } from 'firebase/firestore'
+import { styles } from './styles'
 
 const VehicleListView = ({ navigation, route }) => {
 
     const renderCarItem = ({ item }) => {
-        return (
-            <View>
-                <Pressable onPress={()=>onDetailPress(item)}>
-                    <Text>{item.make} {item.model} {item.trim}</Text>
-                    <Text>Seats: {item.seat}</Text>
-                    <Text>{item.imageName}</Text>
-                    <Text>{item.licensePlate}</Text>
-                    <Text>{item.capacity}</Text>
-                    <Text>{item.isRent ? "rent" : ""}</Text>
-                    <Text>{item.price}</Text>
-                    <Text>{item.address}</Text>
-                </Pressable>
-            </View>
-        )
-    }
+      return (
+        <Pressable
+          onPress={() => onDetailPress(item)}
+          style={styles.listItemContainer}
+        >
+          <View style={styles.imageContainer}>
+            <Image
+              source={{ uri: item.imageUrl[0] }}
+              style={styles.ListImg}
+              alt="Car Image"
+            />
+          </View>
+          <View style={styles.infoContainer}>
+            <Text style={styles.infoText}>
+              Make: {item.make} {item.model}
+            </Text>
+            <Text style={styles.infoText}>
+              Seating Capacity: {item.capacity ? item.capacity : "N/A"}
+            </Text>
+            <Text style={styles.infoText}>
+              Availability: {item.isRent ? "Not Available" : "Available"}
+            </Text>
+            <Text style={styles.infoText}>
+              Price: {item.price ? ("$"+item.price) : "N/A"}
+            </Text>
+          </View>
+        </Pressable>
+      );
+    };
+
 
     const onDetailPress = (item) =>{
-        navigation.navigate("EditVehicle",{item:item})
+        navigation.navigate("VehicleDetails",{item:item})
     }
 
 
@@ -97,6 +113,4 @@ const VehicleListView = ({ navigation, route }) => {
 
 export default VehicleListView
 
-const styles = StyleSheet.create({
 
-});
