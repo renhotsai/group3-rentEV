@@ -168,7 +168,6 @@ const EditVehicleView = ({ navigation, route }) => {
     };
 
     return (
-      <ScrollView>
         <View style={styles.container}>
           <FlatList
             data={imageUrlFromUI}
@@ -293,5 +292,3 @@ const EditVehicleView = ({ navigation, route }) => {
 }
 
 export default EditVehicleView
-
-const styles = StyleSheet.create({})
