@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from "react"
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native"
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from "react-native"
 import { createOrder } from "../../firebaseHelper"
 
 const CarListItem = ({ car }) => {
+  useEffect(() => {
+    console.log(car)
+  }, [car])
   const handleMakeOrder = async () => {
     try {
       createOrder(car)
+      Alert.alert("Your order has been placed!")
     } catch (error) {
       console.error(error)
     }
@@ -15,7 +26,7 @@ const CarListItem = ({ car }) => {
     <View style={styles.card}>
       <Image
         source={{
-          uri: car.image,
+          uri: car.imageUrl[0],
         }}
         style={styles.image}
       />
@@ -71,7 +82,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: "60%",
     marginTop: "auto",
   },
   bookNowButton: {

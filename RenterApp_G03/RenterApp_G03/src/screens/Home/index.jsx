@@ -5,12 +5,33 @@ import { getAllCarData } from "../../firebaseHelper"
 import * as Location from "expo-location"
 import CarListItem from "../../components/CarListItem"
 import CustomMarker from "../../components/CustomMarker"
+import { onSnapshot, collection } from "firebase/firestore"
+import { FIRESTORE_DB } from "../../firebaseConfig"
 
 const Home = () => {
   const [userLocation, setUserLocation] = useState(null)
   const [evCarList, setEvCarList] = useState([])
   const [selectedCar, setSelectedCar] = useState(false)
   const [currCar, setCurrCar] = useState(null)
+  const [search, setSearch] = useState("")
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(FIRESTORE_DB, "Vehicles"),
+      (querySnapshot) => {
+        const temp = []
+        querySnapshot.forEach((doc) => {
+          const vehicle = {
+            id: doc.id,
+            ...doc.data(),
+          }
+          temp.push(vehicle)
+        })
+        setEvCarList(temp)
+      }
+    )
+    return () => unsubscribe()
+  }, [])
   useEffect(() => {
     const fetchLocation = async () => {
       try {
@@ -79,6 +100,10 @@ const styles = StyleSheet.create({
   map: {
     width: "100%",
     height: "100%",
+  },
+  searchBar: {
+    width: 50,
+    height: 50,
   },
 })
 
