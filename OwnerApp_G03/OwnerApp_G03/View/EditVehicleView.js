@@ -182,7 +182,6 @@ const EditVehicleView = ({ navigation, route }) => {
 
             <TextInput placeholder='Seat Capacity' onChangeText={setSeatFromUI} value={seatFromUI} />
             <TextInput placeholder='License Plate' onChangeText={setLicensePlateFromUI} value={licensePlateFromUI} />
-            <TextInput placeholder='Capacity' onChangeText={setCapacityFromUI} value={capacityFromUI} />
             <TextInput placeholder='Price' onChangeText={setPriceFromUI} value={priceFromUI} />
             <TextInput placeholder='Address' onChangeText={setAddressFromUI} value={addressFromUI} />
 
