@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -5,9 +6,11 @@ import Login from './screens/Login';
 import Home from './screens/Home'; 
 import Reservations from './screens/Reservations';
 
-const Stack = createNativeStackNavigator();
+
+const Stack = createNativeStackNavigator()
 
 const Root = () => {
+
     return (
         <NavigationContainer>
             <Stack.Navigator>
@@ -19,4 +22,5 @@ const Root = () => {
     )
 };
 
-export default Root; 
+
+export default Root
