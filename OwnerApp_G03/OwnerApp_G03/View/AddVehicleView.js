@@ -15,13 +15,12 @@ const AddVehicleView = ({ navigation }) => {
     const [capacityFromUI, setCapacityFromUI] = useState("");
     const [priceFromUI, setPriceFromUI] = useState("");
     const [addressFromUI, setAddressFromUI] = useState("");
-
+    const [imageUrlFromUI, setImageUrlFromUI] = useState([])
     // option array
     const [apiData, setApiData] = useState([])
     const [makes, setMakes] = useState([])
     const [models, setModels] = useState([])
     const [trims, setTrims] = useState([])
-    const [images, setImages] = useState([])
 
     // option default
     const [defaultMake, setDefaultMake] = useState("")
@@ -99,8 +98,12 @@ const AddVehicleView = ({ navigation }) => {
             setSeatFromUI(temp[0].seats_min.toString())
         }
         if (temp[0] !== undefined) {
-            console.log(`${JSON.stringify(temp[0].images)}`);
-            setImages(temp[0].images)
+            console.log(`${JSON.stringify(temp[0])}`);
+            const temp2 =[]
+            temp[0].images.forEach(item => {
+                temp2.push(item.url_thumbnail)
+            })
+            setImageUrlFromUI(temp2)
         }
     }, [modelFromUI])
 
@@ -141,6 +144,7 @@ const AddVehicleView = ({ navigation }) => {
             price: priceFromUI,
             address: addressFromUI,
             isRent: false,
+            imageUrl: imageUrlFromUI,
         }
         const vehicle = await add(newVehicle, "Vehicles")
         const owner = await select(auth.currentUser.email, "Owners")
@@ -194,10 +198,10 @@ const AddVehicleView = ({ navigation }) => {
             <TextInput placeholder='Address' onChangeText={setAddressFromUI} value={addressFromUI} />
 
             <FlatList
-                data={images}
+                data={imageUrlFromUI}
                 horizontal={true}
                 key={(item) => { return item.id }}
-                renderItem={({item}) => (<Image source={{ uri: item.url_full }} style={{ height: 100, width: 100 }} />)}
+                renderItem={({item}) => (<Image source={{ uri: item }} style={{ height: 100, width: 100 }} />)}
             />
 
             <Pressable onPress={addVehicle}>
