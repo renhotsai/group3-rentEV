@@ -23,7 +23,6 @@ const Login = ({ navigation }) => {
   useEffect(() => {
     const fetchData = async () => {
       const data = fetchDataFromFirestore()
-      console.log(data)
     }
     fetchData()
   }, [])
