@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
   container: {
@@ -130,17 +130,20 @@ export const styles = StyleSheet.create({
   detailValue: {
     fontSize: 16,
   },
-  profileImg:{
-    width:200,
+  profileImg: {
+    width: 200,
     height: 200,
     alignSelf: "center",
     marginBottom: 20,
   },
   topMargin: {
-    marginTop : 20
-  }
-  ,disabledButton: {
-    opacity: 0.5, 
+    marginTop: 20,
+    disabledButton: {
+      opacity: 0.5,
+    },
   },
-
-});
+  map: {
+    flex: 1,
+    height: 200,
+  },
+})
