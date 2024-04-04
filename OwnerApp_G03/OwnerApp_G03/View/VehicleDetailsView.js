@@ -8,7 +8,6 @@ import {
   Pressable,
 } from "react-native";
 import { styles } from "./styles";
-import { pickerArrow } from "./pickerArrow";
 
 const VehicleDetailsView = ({ navigation, route }) => {
   const data = route.params.item;
@@ -17,12 +16,22 @@ const VehicleDetailsView = ({ navigation, route }) => {
     navigation.navigate("EditVehicle", { item: data });
   };
 
-  const renderDetailItem = (label, value) => (
-    <View style={styles.detailContainer}>
-      <Text style={styles.detailLabel}>{label}</Text>
-      <Text style={styles.detailValue}>{value ? value : "NA"}</Text>
-    </View>
-  );
+  const renderDetailItem = (label, value) => {
+    if (label !== undefined) {
+      let outPutValue = value
+      if (label === "Availability"){
+        console.log(value);
+        outPutValue = value ? !value : !value
+      }
+      return (
+        <View style={styles.detailContainer}>
+          <Text style={styles.detailLabel}>{label}</Text>
+          <Text style={styles.detailValue}>{outPutValue.toString() ? outPutValue.toString
+          () : "NA"}</Text>
+        </View>
+      )
+    }
+  }
 
   const renderDetailPair = (label1, value1, label2, value2) => (
     <View style={[styles.detailRow]}>
@@ -51,7 +60,7 @@ const VehicleDetailsView = ({ navigation, route }) => {
           data.trim
         )}
         {renderDetailPair(
-          "Seats",
+          "Seat Capacity",
           data.seat,
           "License Plate",
           data.licensePlate
@@ -59,17 +68,15 @@ const VehicleDetailsView = ({ navigation, route }) => {
         {renderDetailPair(
           "Availability",
           data.isRent,
-          "Capacity",
-          data.capacity
-        )}
-        {renderDetailPair(
           "Price",
           data.price ? "$" + data.price : "NA",
+        )}
+        {renderDetailPair(
           "Address",
           data.address
         )}
 
-        <Pressable style={[styles.button, styles.topMargin]} onPress={handleEditPress}>
+        <Pressable style={[styles.button, styles.topMargin, data.isRent && styles.disabledButton]} disabled={data.isRent} onPress={handleEditPress}>
           <Text style={styles.buttonText}>Edit</Text>
         </Pressable>
       </View>

@@ -143,7 +143,6 @@ const AddVehicleView = ({ navigation }) => {
         !trimFromUI ||
         !seatFromUI ||
         !licensePlateFromUI ||
-        !capacityFromUI ||
         !priceFromUI ||
         !addressFromUI
       ) {
@@ -158,7 +157,6 @@ const AddVehicleView = ({ navigation }) => {
         trim: trimFromUI,
         seat: seatFromUI,
         licensePlate: licensePlateFromUI,
-        capacity: capacityFromUI,
         price: priceFromUI,
         address: addressFromUI,
         isRent: false,
@@ -169,9 +167,9 @@ const AddVehicleView = ({ navigation }) => {
       const ownerData = owner.data();
       ownerData.carList.push(vehicle.id);
 
-      await update(ownerData, "Owners", owner.id);
-      Alert.alert("Success!");
-      navigation.navigate("Main");
+        await update(ownerData, "Owners", owner.id)
+        Alert.alert("Success!")
+        navigation.navigate('Main')
     }
 
     const renderItem = (item) => {

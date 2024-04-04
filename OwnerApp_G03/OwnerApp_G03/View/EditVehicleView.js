@@ -140,7 +140,6 @@ const EditVehicleView = ({ navigation, route }) => {
         !trimFromUI ||
         !seatFromUI ||
         !licensePlateFromUI ||
-        !capacityFromUI ||
         !priceFromUI ||
         !addressFromUI
       ) {
@@ -155,7 +154,6 @@ const EditVehicleView = ({ navigation, route }) => {
         trim: trimFromUI,
         seat: seatFromUI,
         licensePlate: licensePlateFromUI,
-        capacity: capacityFromUI,
         price: priceFromUI,
         address: addressFromUI,
         isRent: false,
@@ -259,7 +257,7 @@ const EditVehicleView = ({ navigation, route }) => {
             Icon={pickerArrow}
           />
 
-          <Text style={styles.label}>Seats</Text>
+          <Text style={styles.label}>Seat Capacity</Text>
           <TextInput
             placeholder="Seats"
             onChangeText={setSeatFromUI}
@@ -271,13 +269,6 @@ const EditVehicleView = ({ navigation, route }) => {
             placeholder="License Plate"
             onChangeText={setLicensePlateFromUI}
             value={licensePlateFromUI}
-            style={styles.input}
-          />
-          <Text style={styles.label}>Capacity</Text>
-          <TextInput
-            placeholder="Capacity"
-            onChangeText={setCapacityFromUI}
-            value={capacityFromUI}
             style={styles.input}
           />
           <Text style={styles.label}>Price</Text>
@@ -304,4 +295,3 @@ const EditVehicleView = ({ navigation, route }) => {
 };
 
 export default EditVehicleView
-
