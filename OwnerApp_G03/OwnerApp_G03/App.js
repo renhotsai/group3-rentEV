@@ -1,20 +1,31 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import MainView from './View/MainView'
+import LoginView from './View/LoginView'
+import { useEffect, useState } from 'react';
+import SignUpView from './View/SignUpView';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-export default function App() {
+const App = () => {
+  const [screen, setScreen] = useState("Login")
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <NavigationContainer>
+
+      {(() => {
+        switch (screen) {
+          case "Login":
+            return <LoginView changeScreen={setScreen} />;
+          case "SignUp":
+            return <SignUpView changeScreen={setScreen} />;
+          case "Main":
+            return <MainView />;
+          default:
+            return null; // Or render a default component if needed
+        }
+      })()}
+    </NavigationContainer>
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App
+

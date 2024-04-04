@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps" // Import PROVIDER_GOOGLE for Android
@@ -67,6 +68,7 @@ const Home = () => {
             ))}
           </MapView>
           {selectedCar && <CarListItem car={currCar} />}
+
         </View>
       )}
     </View>
@@ -83,4 +85,6 @@ const styles = StyleSheet.create({
   },
 })
 
+
 export default Home
+
