@@ -10,9 +10,6 @@ import {
 import { createOrder } from "../../firebaseHelper"
 
 const CarListItem = ({ car }) => {
-  useEffect(() => {
-    console.log(car)
-  }, [car])
   const handleMakeOrder = async () => {
     try {
       createOrder(car)
