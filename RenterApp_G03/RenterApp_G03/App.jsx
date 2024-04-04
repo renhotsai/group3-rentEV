@@ -1,7 +1,5 @@
-
-import Root from './src/Root';
+import Root from "./src/Root"
 
 export default function App() {
-  return <Root/>;
+  return <Root />
 }
-

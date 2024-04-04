@@ -1,74 +1,101 @@
-import { useState } from "react"
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
-import { signup } from "../Controller/fireAuthHelper"
-import { auth } from "../firebaseConfig"
-import { addUser } from "../Controller/fireDBHelper"
-
+import React, { useState } from "react";
+import { Pressable, Text, TextInput, View, Image } from "react-native";
+import { signup } from "../Controller/fireAuthHelper";
+import { addUser } from "../Controller/fireDBHelper";
+import { auth } from "../firebaseConfig";
+import { styles } from "./styles";
 
 const SignUpView = (props) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+    const [name, setName] = useState("");
+    
+    const onCancelClicked = () => {
+            props.changeScreen("Login");
 
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [phone, setPhone] = useState("")
-    const [address, setAddress] = useState("")
-    const [name, setName] = useState("")
-
-
-    const onSignUpClicked = () => {
-        // console.log(`email: ${email}, password: ${password}`);
-        // console.log(`auth:${JSON.stringify(auth.currentUser)}`);
-        signup(email, password)
-            .then(() => {
-                console.log("User signed up successfully");
-                const newUser = {
-                    address: address,
-                    carList: [],
-                    email: email,
-                    name: name,
-                    orderList: [],
-                    phone: phone
-                };
-
-                addUser(newUser, "Owners")
-                    .then(() => {
-                        console.log("User added successfully");
-                        props.login(true); // Assuming props.login is a function passed as a prop
-                    })
-                    .catch(error => {
-                        console.error("Error adding user:", error);
-                        // Handle error if addUser fails
-                    });
-            })
-            .catch(error => {
-                console.error("Error signing up:", error);
-                // Handle error if signup fails
-            });
     }
 
-    return (
-        <View style={styles.container}>
-            <Text>SignUpView</Text>
-            <TextInput placeholder="email" onChangeText={setEmail} value={email}></TextInput>
-            <TextInput placeholder="password" onChangeText={setPassword} value={password}></TextInput>
-            <TextInput placeholder="name" onChangeText={setName} value={name}></TextInput>
-            <TextInput placeholder="address" onChangeText={setAddress} value={address}></TextInput>
-            <TextInput placeholder="phone" onChangeText={setPhone} value={phone}></TextInput>
-            <Pressable onPress={onSignUpClicked}>
-                <Text>Sign Up</Text>
-            </Pressable>
-        </View>
-    )
-}
+  const onSignUpClicked = () => {
+    signup(email, password)
+      .then(() => {
+        const newUser = {
+          address: address,
+          carList: [],
+          email: email,
+          name: name,
+          orderList: [],
+          phone: phone,
+        };
 
-export default SignUpView
+        addUser(newUser, "Owners")
+          .then(() => {
+            props.login(true);
+          })
+          .catch((error) => {
+            console.error("Error adding user:", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error signing up:", error);
+      });
+  };
 
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Create an Account</Text>
+      <Text style={styles.label}>Email</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        onChangeText={setEmail}
+        value={email}
+      />
+      <Text style={styles.label}>Password</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        onChangeText={setPassword}
+        value={password}
+        secureTextEntry={true}
+      />
+      <Text style={styles.label}>Name</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Name"
+        onChangeText={setName}
+        value={name}
+      />
+      <Text style={styles.label}>Address</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Address"
+        onChangeText={setAddress}
+        value={address}
+      />
+      <Text style={styles.label}>Phone</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Phone"
+        onChangeText={setPhone}
+        value={phone}
+      />
+      <Pressable style={styles.button} onPress={onSignUpClicked}>
+        <Text style={styles.buttonText}>Sign Up</Text>
+      </Pressable>
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 60
-    },
-});
+      <Pressable
+        style={[styles.button, styles.buttonStyleTwo]}
+        onPress={onCancelClicked}
+      >
+        <Text style={[styles.buttonText, styles.buttonTextStyleTwo]}>
+          Cancel
+        </Text>
+          </Pressable>
+          
+    </View>
+  );
+};
+
+export default SignUpView;
