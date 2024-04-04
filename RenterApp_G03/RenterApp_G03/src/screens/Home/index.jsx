@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps"
-import { StyleSheet, View, TextInput } from "react-native"
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps" // Import PROVIDER_GOOGLE for Android
+import { StyleSheet, View, Text } from "react-native"
 import { getAllCarData } from "../../firebaseHelper"
 import * as Location from "expo-location"
 import CarListItem from "../../components/CarListItem"
@@ -32,7 +32,6 @@ const Home = () => {
     )
     return () => unsubscribe()
   }, [])
-
   useEffect(() => {
     const fetchLocation = async () => {
       try {
@@ -64,14 +63,8 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.searchBar}
-        placeholder="Search..."
-        onChangeText={(text) => setSearch(text)}
-        value={search}
-      />
       {userLocation && (
-        <View style={styles.mapContainer}>
+        <View>
           <MapView
             style={styles.map}
             provider={PROVIDER_GOOGLE}
@@ -104,19 +97,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  mapContainer: {
-    flex: 1,
-  },
   map: {
-    flex: 1,
+    width: "100%",
+    height: "100%",
   },
   searchBar: {
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    borderRadius: 5,
-    margin: 10,
-    paddingHorizontal: 10,
+    width: 50,
+    height: 50,
   },
 })
 
