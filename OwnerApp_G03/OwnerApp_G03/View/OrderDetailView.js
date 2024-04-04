@@ -73,7 +73,11 @@ const OrderDetailView = ({ navigation, route }) => {
 
         ) : order.status === "DECLINED" ? (
           <Text>DECLINED</Text>
-        ) : <Text> APPROVED </Text>
+        ) :
+        <View>
+          <Text> APPROVED </Text>
+          <Text> {order.confirmCode} </Text>
+        </View> 
       }
     </View>
   )
