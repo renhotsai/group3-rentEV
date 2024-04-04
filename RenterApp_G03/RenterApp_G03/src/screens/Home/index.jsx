@@ -1,12 +1,10 @@
-
 import React, { useState, useEffect } from "react"
-import axios from "axios"
 import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps" // Import PROVIDER_GOOGLE for Android
 import { StyleSheet, View, Text } from "react-native"
+import { getAllCarData } from "../../firebaseHelper"
 import * as Location from "expo-location"
 import CarListItem from "../../components/CarListItem"
 import CustomMarker from "../../components/CustomMarker"
-import { getAllCarData } from "../../firebaseHelper"
 
 const Home = () => {
   const [userLocation, setUserLocation] = useState(null)
@@ -68,7 +66,6 @@ const Home = () => {
             ))}
           </MapView>
           {selectedCar && <CarListItem car={currCar} />}
-
         </View>
       )}
     </View>
@@ -85,6 +82,4 @@ const styles = StyleSheet.create({
   },
 })
 
-
 export default Home
-
