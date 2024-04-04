@@ -1,9 +1,8 @@
-import React from 'react'; 
-import { View, Text, StyleSheet, Image, FlatList } from "react-native";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
-import { FIRESTORE_DB } from '../../firebaseConfig';
-import { useState, useEffect } from 'react';
-
+import React from "react"
+import { View, Text, StyleSheet, Image, FlatList } from "react-native"
+import { collection, query, where, onSnapshot, doc } from "firebase/firestore"
+import { FIRESTORE_DB, FIREBASE_AUTH } from "../../firebaseConfig"
+import { useState, useEffect } from "react"
 
 const Reservations = () => {
 
@@ -99,23 +98,63 @@ const Reservations = () => {
         </View>
     )
 
-    useEffect(()=>{
-        console.log("SCREEN HAS LOADED")
-        fetchFromDb()
-    },[])
-    
-    return (
-        <View style={styles.container}>
-            <Text style={styles.pageHeading}> My Reservations </Text>
-            <FlatList
-                style={styles.reservationList}
-                data={reservationData}
-                key={(item) => {return item.id}}
-                ListEmptyComponent={renderEmptyMsg}
-                renderItem={ (item) => renderResItem(item) }
-            />         
-        </View>
+  const getDate = (time) => {
+    const timestamp =
+      time.seconds * 1000 + Math.floor(time.nanoseconds / 1000000) // Combine seconds and nanoseconds to get milliseconds
+    const date = new Date(timestamp)
+    const formattedDate = date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    })
+    console.log(formattedDate) // Output: April 15, 2024
+    return formattedDate
+  }
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(FIRESTORE_DB, "Orders"),
+      (querySnapshot) => {
+        const temp = []
+        querySnapshot.forEach((doc) => {
+          const order = {
+            id: doc.id,
+            ...doc.data(),
+          }
+          temp.push(order)
+        })
+        setReservationData(temp)
+      }
     )
+    return () => unsubscribe()
+  }, [])
+
+  useEffect(() => {
+    if (FIREBASE_AUTH.currentUser !== null) {
+      const unsubscribe = onSnapshot(
+        doc(FIRESTORE_DB, "Rentals", FIREBASE_AUTH.currentUser.email), (querySnapshot) => {
+          console.log(
+            `rental: ${querySnapshot.data()}`
+          );
+        })
+    }
+  }, [])
+
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.pageHeading}> My Reservations </Text>
+      <FlatList
+        style={styles.reservationList}
+        data={reservationData}
+        key={(item) => {
+          return item.id
+        }}
+        ListEmptyComponent={renderEmptyMsg}
+        renderItem={(item) => renderResItem(item)}
+      />
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
