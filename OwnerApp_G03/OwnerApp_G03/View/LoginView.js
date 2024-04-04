@@ -1,52 +1,68 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native"
-import { signin } from "../Controller/fireAuthHelper"
-import { useState } from "react"
-import SignUpView from "./SignUpView"
-import { auth } from "../firebaseConfig"
-
-
+import React, { useState } from "react";
+import { Pressable, Text, TextInput, View, Image } from "react-native";
+import { signin } from "../Controller/fireAuthHelper";
+import { auth } from "../firebaseConfig";
+import { styles } from "./styles";
 
 const LoginView = (props) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
+  const onLoginClicked = () => {
+    signin(email, password).then(() => {
+      if (auth.currentUser !== null) {
+        props.changeScreen("Main");
+      }
+    });
+  };
 
-    const onLoginClicked = () => {
-        signin(email, password).then(() => {
-            if (auth.currentUser !== null) {
-                props.changeScreen("Main")
-            }
+  const onSignUpClicked = () => {
+    props.changeScreen("SignUp");
+  };
 
-        })
-    }
-    const onSignUpClicked = () => {
-        props.changeScreen("SignUp")
-    }
+  return (
+    <View style={styles.container}>
+      <Image
+        source={{ uri: "https://withfra.me/android-chrome-512x512.png" }}
+        style={styles.headerImg}
+        alt="Logo"
+      />
 
-    return (
-        <View style={styles.container}>
-            <Text>LoginView</Text>
-            <TextInput placeholder="Email" onChangeText={setEmail} value={email}></TextInput>
-            <TextInput placeholder="Password" onChangeText={setPassword} value={password}></TextInput>
-            <Pressable onPress={onLoginClicked}>
-                <Text>Login</Text>
-            </Pressable>
-            <Pressable onPress={onSignUpClicked}>
-                <Text>SignUp</Text>
-            </Pressable>
-        </View>
-    );
-}
+      <Text style={styles.title}>Rent EV</Text>
+      <Text style={styles.subtitle}>#1 EV Rental platform in Canada</Text>
 
-export default LoginView
+      <Text style={styles.label}>Email</Text>
 
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        onChangeText={setEmail}
+        value={email}
+      />
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 60
-    },
-});
+      <Text style={styles.label}>Password</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        onChangeText={setPassword}
+        value={password}
+        secureTextEntry={true}
+      />
+      <Pressable style={styles.button} onPress={onLoginClicked}>
+        <Text style={styles.buttonText}>Login</Text>
+      </Pressable>
+
+      <Pressable
+        style={[styles.button, styles.buttonStyleTwo]}
+        onPress={onSignUpClicked}
+      >
+        <Text style={[styles.buttonText, styles.buttonTextStyleTwo]}>
+          Sign Up
+        </Text>
+      </Pressable>
+    </View>
+  );
+};
+
+export default LoginView;
