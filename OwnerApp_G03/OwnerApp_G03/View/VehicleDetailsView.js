@@ -72,7 +72,7 @@ const VehicleDetailsView = ({ navigation, route }) => {
         )}
         {renderDetailPair(
           "Availability",
-          (item.isRent ? "Not Available" : "Available"),
+          (data.isRent ? "Not Available" : "Available"),
           "Capacity",
           data.capacity
         )}
