@@ -132,23 +132,36 @@ const AddVehicleView = ({ navigation }) => {
     }, [])
 
     const addVehicle = async () => {
-        //Verify
-        const newVehicle = {
-            make: makeFromUI,
-            model: modelFromUI,
-            trim: trimFromUI,
-            seat: seatFromUI,
-            licensePlate: licensePlateFromUI,
-            price: priceFromUI,
-            address: addressFromUI,
-            isRent: false,
-            imageUrl: imageUrlFromUI,
-        }
-        const vehicle = await add(newVehicle, "Vehicles")
-        const owner = await select(auth.currentUser.email, "Owners")
-        const ownerData = owner.data()
-        ownerData.carList.push(vehicle.id)
+      // Input validation
+      if (
+        !makeFromUI ||
+        !modelFromUI ||
+        !trimFromUI ||
+        !seatFromUI ||
+        !licensePlateFromUI ||
+        !priceFromUI ||
+        !addressFromUI
+      ) {
+        Alert.alert("Error", "Please fill in all fields");
+        return;
+      }
 
+      //Verify
+      const newVehicle = {
+        make: makeFromUI,
+        model: modelFromUI,
+        trim: trimFromUI,
+        seat: seatFromUI,
+        licensePlate: licensePlateFromUI,
+        price: priceFromUI,
+        address: addressFromUI,
+        isRent: false,
+        imageUrl: imageUrlFromUI,
+      };
+      const vehicle = await add(newVehicle, "Vehicles");
+      const owner = await select(auth.currentUser.email, "Owners");
+      const ownerData = owner.data();
+      ownerData.carList.push(vehicle.id);
 
         await update(ownerData, "Owners", owner.id)
         Alert.alert("Success!")
@@ -189,10 +202,34 @@ const AddVehicleView = ({ navigation }) => {
                 items={trims}
             />
 
-            <TextInput placeholder='Seat Capacity' onChangeText={setSeatFromUI} value={seatFromUI} />
-            <TextInput placeholder='License Plate' onChangeText={setLicensePlateFromUI} value={licensePlateFromUI} />
-            <TextInput placeholder='Price' onChangeText={setPriceFromUI} value={priceFromUI} />
-            <TextInput placeholder='Address' onChangeText={setAddressFromUI} value={addressFromUI} />
+          <Text style={styles.label}>Seat Capacity</Text>
+          <TextInput
+            placeholder="Seats"
+            onChangeText={setSeatFromUI}
+            value={seatFromUI.toString()}
+            style={styles.input}
+          />
+          <Text style={styles.label}>License Plate</Text>
+          <TextInput
+            placeholder="License Plate"
+            onChangeText={setLicensePlateFromUI}
+            value={licensePlateFromUI}
+            style={styles.input}
+          />
+          <Text style={styles.label}>Price</Text>
+          <TextInput
+            placeholder="Price"
+            onChangeText={setPriceFromUI}
+            value={priceFromUI}
+            style={styles.input}
+          />
+          <Text style={styles.label}>Address</Text>
+          <TextInput
+            placeholder="Address"
+            onChangeText={setAddressFromUI}
+            value={addressFromUI}
+            style={[styles.input, styles.marginBottom]}
+          />
 
             <FlatList
                 data={imageUrlFromUI}
