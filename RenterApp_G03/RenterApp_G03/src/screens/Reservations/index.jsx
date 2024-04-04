@@ -15,6 +15,8 @@ const Reservations = () => {
   //   let tempList = []
   const [reservationData, setReservationData] = useState([])
 
+  const [reservation,setReservation] = useState([])
+
   const [userOrders, setUserOrders] = useState([])
 
   //   const fetchFromDb = () => {
@@ -137,7 +139,26 @@ const Reservations = () => {
 
   useEffect(() => {
     updateReservationData()
-  }, [userOrders])
+  }, [userOrders,reservation])
+
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(FIRESTORE_DB, "Orders"),
+      (querySnapshot) => {
+        const temp = []
+        querySnapshot.forEach((doc) => {
+          const order = {
+            id: doc.id,
+            ...doc.data(),
+          }
+          temp.push(order)
+        })
+        setReservation(temp)
+      }
+    )
+    return () => unsubscribe()
+  }, [])
 
   const updateReservationData = async () => {
     const temp = []
