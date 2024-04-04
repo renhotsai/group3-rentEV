@@ -16,7 +16,7 @@ export const fetchDataFromFirestore = async () => {
     querySnapshot.forEach((doc) => {
       data.push({ id: doc.id, ...doc.data() })
     })
-    console.log(data)
+
     return data
   } catch (error) {
     console.error("Error getting documents", error)
@@ -53,13 +53,31 @@ export const createOrder = async (vehicle) => {
       randomStartDate.getTime() + Math.random() * (endDate - randomStartDate)
     )
 
+    const ownerItem = await getDocs(
+      collection(FIRESTORE_DB, "Owners"),
+      where("carList", "in", vehicle.id)
+    )
+
+    // get owner name
+    const ownerName = ownerItem.docs[0].data().name
+    const vehicleName = vehicle.make + " " + vehicle.model
+
     const docRef = await addDoc(collection(FIRESTORE_DB, "Orders"), {
       startDate: randomStartDate,
       endDate: randomEndDate,
       rental: userEmail,
       vehicle: vehicle.id,
       status: "PENDING",
+      vehicleName: vehicleName,
+      vehicleOwnerName: ownerName,
+      vehicleLicenseNo: vehicle.licensePlate,
+      pickUpAddress: vehicle.address,
+      price: vehicle.price,
+      bookingDate: randomStartDate,
+      vehicleImg: vehicle.imageUrl,
+      vehicleOwnerImg: "",
     })
+
     console.log("Document written with ID: ", docRef.id)
 
     // add vehicle id in userDocument to rentals collection's orderList array
@@ -68,11 +86,6 @@ export const createOrder = async (vehicle) => {
     await updateDoc(doc(FIRESTORE_DB, "Rentals", userEmail), {
       orderList: orderList,
     })
-
-    const ownerItem = await getDocs(
-      collection(FIRESTORE_DB, "Owners"),
-      where("carList", "in", vehicle.id)
-    )
 
     ownerItem.forEach(async (doc) => {
       try {
