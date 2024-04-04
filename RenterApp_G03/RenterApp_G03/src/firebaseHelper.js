@@ -82,7 +82,7 @@ export const createOrder = async (vehicle) => {
 
     // add vehicle id in userDocument to rentals collection's orderList array
     const orderList = userDocument.data().orderList
-    orderList.push(vehicle.id)
+    orderList.push(docRef.id)
     await updateDoc(doc(FIRESTORE_DB, "Rentals", userEmail), {
       orderList: orderList,
     })

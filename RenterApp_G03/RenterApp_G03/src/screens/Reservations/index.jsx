@@ -1,12 +1,14 @@
 import React from "react"
 import { View, Text, StyleSheet, Image, FlatList } from "react-native"
-import { collection, query, where, onSnapshot, doc } from "firebase/firestore"
+import { collection, query, where, onSnapshot, doc, getDoc} from "firebase/firestore"
 import { FIRESTORE_DB, FIREBASE_AUTH } from "../../firebaseConfig"
 import { useState, useEffect } from "react"
 
 const Reservations = () => {
   //   let tempList = []
   const [reservationData, setReservationData] = useState([])
+
+  const [userOrders, setUserOrders] = useState([])
 
   //   const fetchFromDb = () => {
   //     const q = query(collection(FIRESTORE_DB, "Orders"))
@@ -109,36 +111,41 @@ const Reservations = () => {
     return formattedDate
   }
 
-  useEffect(() => {
-    const unsubscribe = onSnapshot(
-      collection(FIRESTORE_DB, "Orders"),
-      (querySnapshot) => {
-        const temp = []
-        querySnapshot.forEach((doc) => {
-          const order = {
-            id: doc.id,
-            ...doc.data(),
-          }
-          temp.push(order)
-        })
-        setReservationData(temp)
-      }
-    )
-    return () => unsubscribe()
-  }, [])
 
   useEffect(() => {
     if (FIREBASE_AUTH.currentUser !== null) {
       const unsubscribe = onSnapshot(
         doc(FIRESTORE_DB, "Rentals", FIREBASE_AUTH.currentUser.email), (querySnapshot) => {
-          console.log(
-            `rental: ${JSON.stringify(querySnapshot.data())}`
-          );
+          setUserOrders(querySnapshot.data().orderList)
         })
+        return () => {
+          unsubscribe()
+      }
     }
   }, [])
 
 
+  useEffect(() => {
+    updateReservationData()
+  },[userOrders])
+
+  const updateReservationData = async() => {
+    const temp = [];
+    const promises = userOrders.map(async (orderId) => {
+        console.log(`orderId: ${orderId}`);
+        const docFromDB = await getDoc(doc(FIRESTORE_DB, "Orders", orderId));
+        console.log(`docFromDB ID : ${docFromDB.id}`);
+        const order = {
+            id: docFromDB.id,
+            ...docFromDB.data(),
+        };
+        temp.push(order);
+    });
+    await Promise.all(promises);
+    console.log(`temp: ${JSON.stringify(temp)}`);
+    setReservationData(temp);
+  }
+  
   return (
     <View style={styles.container}>
       <Text style={styles.pageHeading}> My Reservations </Text>
