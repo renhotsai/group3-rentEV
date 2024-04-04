@@ -153,6 +153,7 @@ const Reservations = () => {
             ...doc.data(),
           }
           temp.push(order)
+          console.log(order);
         })
         setReservation(temp)
       }
