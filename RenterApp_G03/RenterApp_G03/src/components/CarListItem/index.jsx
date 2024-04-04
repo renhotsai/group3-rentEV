@@ -11,8 +11,9 @@ import { createOrder } from "../../firebaseHelper"
 
 const CarListItem = ({ car }) => {
   useEffect(() => {
-    console.log(car)
+    console.log("Car: ", car)
   }, [car])
+
   const handleMakeOrder = async () => {
     try {
       createOrder(car)
@@ -40,12 +41,18 @@ const CarListItem = ({ car }) => {
         <Text>Address: {car.address}</Text>
         <View style={styles.footer}>
           <Text style={styles.price}>$ {car.price}</Text>
-          <TouchableOpacity
-            style={styles.bookNowButton}
-            onPress={handleMakeOrder}
-          >
-            <Text style={styles.bookNowText}>Book Now</Text>
-          </TouchableOpacity>
+          {!car.isRent ? (
+            <TouchableOpacity
+              style={styles.bookNowButton}
+              onPress={handleMakeOrder}
+            >
+              <Text style={styles.bookNowText}>Book Now</Text>
+            </TouchableOpacity>
+          ) : (
+            <View style={[styles.bookNowButton, styles.bookNowButtonDisabled]}>
+              <Text style={styles.bookNowText}>Book Now</Text>
+            </View>
+          )}
         </View>
       </View>
     </View>
@@ -89,6 +96,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 5,
+  },
+  bookNowButtonDisabled: {
+    backgroundColor: "lightgray",
   },
   bookNowText: {
     color: "white",
