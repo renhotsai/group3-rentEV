@@ -13,7 +13,6 @@ const OrderDetailView = ({ navigation, route }) => {
     })
     getDoc(doc(db, "Rentals", order.rental)).then((doc) => {
       setRentalInfo(doc.data())
-      console.log(doc.data())
     })
   }, [])
 
@@ -87,7 +86,7 @@ const OrderDetailView = ({ navigation, route }) => {
               <Text style={styles.label}>Pick-Up Address</Text>
               <Text>{orderDetail.pickUpAddress}</Text>
               <Text style={styles.label}>Price</Text>
-              <Text>{orderDetail.price}</Text>
+              <Text>${orderDetail.price}</Text>
               <Text style={styles.label}>Vehicle License No</Text>
               <Text>{orderDetail.vehicleLicenseNo}</Text>
               <Text style={styles.label}>Vehicle Name</Text>
