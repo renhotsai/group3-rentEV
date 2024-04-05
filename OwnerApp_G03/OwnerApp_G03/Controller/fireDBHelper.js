@@ -15,7 +15,7 @@ import {
 
 const add = async (itemToInsert, col) => {
   try {
-    console.log("start add item. ${JSON.stringify(itemToInsert)}")
+    console.log(`start add item. ${JSON.stringify(itemToInsert)}`)
 
     const insertedDocument = await addDoc(collection(db, col), itemToInsert)
     console.log("Document written with ID: ", insertedDocument.id)
@@ -28,15 +28,17 @@ const add = async (itemToInsert, col) => {
 
 const addUser = async (itemToInsert, col) => {
   try {
-    console.log("start add item. ${JSON.stringify(itemToInsert)}")
-    const insertedDocument = await setDoc(
+    console.log(`start add item. ${JSON.stringify(itemToInsert)}`)
+    await setDoc(
       doc(db, col, itemToInsert.email.toLowerCase()),
       itemToInsert
     )
-    console.log("Document written with ID: ", insertedDocument.id)
+    return true
+    // console.log("Document written with ID: ", insertedDocument.id)
     // display success message
   } catch (err) {
     console.log(err)
+    return false
   }
 }
 
@@ -51,7 +53,7 @@ const delDoc = async (studentToDelete) => {
 const update = async (itemToUpdate, col, docId) => {
   try {
     console.log("start to update...")
-    console.log("col:${col},docId:${docId}")
+    console.log(`col:${col},docId:${docId}`)
     const docRef = doc(db, col, docId)
 
     await updateDoc(docRef, itemToUpdate)
@@ -68,7 +70,6 @@ const select = async (docId, col) => {
     if (docSnap.exists()) {
       return docSnap
     } else {
-      // docSnap.data() will be undefined in this case
       console.log("No such document!")
     }
   } catch (err) {

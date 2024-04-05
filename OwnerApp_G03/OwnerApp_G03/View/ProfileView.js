@@ -3,7 +3,7 @@ import { Text, View, Image, Pressable } from "react-native";
 import { styles } from "./styles";
 import { select } from "../Controller/fireDBHelper";
 import { auth } from "../firebaseConfig";
-const ProfileView = ({ navigation }) => {
+const ProfileView = ({ navigation, route }) => {
   const [user, setUser] = useState({});
   const [carLength, setCarLength] = useState(0);
   const [orderLength, setOrderLength] = useState(0);
@@ -19,15 +19,9 @@ const ProfileView = ({ navigation }) => {
     });
   }, []);
   const handleLogout = () => {
-    auth
-      .signOut()
-      .then(() => {
-        // Navigate to login page after logout
-            navigation.navigate("Login", { screen: "Login", resetStack: true });
-      })
-      .catch((error) => {
-        console.error("Error signing out: ", error);
-      });
+    auth.signOut()
+    navigation.popToTop()
+
   };
   return (
     <View style={styles.container}>
@@ -61,6 +55,12 @@ const ProfileView = ({ navigation }) => {
         <Text style={styles.detailLabel}>Phone:</Text>
         <Text style={styles.detailValue}>{user.phone}</Text>
       </View>
+      <Pressable
+        style={[styles.button, styles.topMargin]}
+        onPress={handleLogout}
+      >
+        <Text style={styles.buttonText}>Log Out</Text>
+      </Pressable>
     </View>
   );
 };

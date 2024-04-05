@@ -4,20 +4,22 @@ import { signin } from "../Controller/fireAuthHelper";
 import { auth } from "../firebaseConfig";
 import { styles } from "./styles";
 
-const LoginView = (props) => {
+const LoginView = ({ route, navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const onLoginClicked = () => {
     signin(email, password).then(() => {
       if (auth.currentUser !== null) {
-        props.changeScreen("Main");
+        setEmail("")
+        setPassword("")
+        navigation.navigate("Main");
       }
     });
   };
 
   const onSignUpClicked = () => {
-    props.changeScreen("SignUp");
+    navigation.navigate("SignUp");
   };
 
   return (

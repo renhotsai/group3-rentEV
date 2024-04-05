@@ -1,52 +1,71 @@
-import { Pressable, StyleSheet, Text, View } from "react-native"
-import React, { Component, useEffect } from "react"
-import VehicleListView from "./VehicleListView"
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { AntDesign } from "@expo/vector-icons"
-import AddVehicleView from "./AddVehicleView"
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { Pressable } from "react-native"
+import VehicleListView from "./VehicleListView"
 import ProfileView from "./ProfileView"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import HomeView from "./HomeView"
-import EditVehicleView from "./EditVehicleView"
-import OrderDetailView from "./OrderDetailView"
-import VehicleDetailsView from "./VehicleDetailsView"
-import LoginView from "./LoginView"
-const Tab = createBottomTabNavigator()
-const MainView = ({ navigation, route }) => {
-  const Stack = createNativeStackNavigator()
+import { FontAwesome5 } from "@expo/vector-icons"
+import OrderListView from "./OrderListView"
+import { useEffect, useState } from "react"
+import { collection, doc, getDocs, onSnapshot } from "firebase/firestore"
+import { auth, db } from "../firebaseConfig"
+import { select } from "../Controller/fireDBHelper"
+
+const MainView = ({ navigation }) => {
+  const onAddPress = () => {
+    navigation.navigate("AddVehicle")
+  }
+
+  const Tab = createBottomTabNavigator()
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Main"
-        component={HomeView}
-        options={{ headerShown: false }}
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          if (route.name == "Cars") {
+            return <AntDesign name="car" size={24} color="black" />
+          }
+          if (route.name == "Profile") {
+            return <AntDesign name="profile" size={24} color="black" />
+          }
+          if (route.name == "Order") {
+            return <FontAwesome5 name="list" size={24} color="black" />
+          }
+        },
+        tabBarActiveTintColor: "tomato",
+        tabBarInactiveTintColor: "gray",
+      })}
+    >
+      <Tab.Screen name="Order" component={OrderListView} />
+      <Tab.Screen
+        name="Cars"
+        component={VehicleListView}
+        options={{
+          headerRight: () => (
+            <Pressable onPress={onAddPress}>
+              <AntDesign
+                name="pluscircleo"
+                style={{ paddingRight: 16 }}
+                size={24}
+                color="black"
+              />
+            </Pressable>
+          ),
+        }}
       />
-      <Stack.Screen
-        name="AddVehicle"
-        component={AddVehicleView}
-        options={{ title: "Add Vehicle" }}
+      {/* <Tab.Screen name="Profile" component={ProfileView} /> */}
+      
+      <Tab.Screen
+        name="Profile"
+        component={ProfileView}
+        initialParams={{ changeScreen: null }} // Initialize changeScreen prop
+        listeners={({ navigation }) => ({
+          tabPress: (event) => {
+            // Pass the changeScreen function to ProfileView when tab is pressed
+            navigation.setParams({ changeScreen: navigation.changeScreen });
+          },
+        })}
       />
-      <Stack.Screen
-        name="VehicleDetails"
-        component={VehicleDetailsView}
-        options={{ title: "Car Details" }}
-      />
-      <Stack.Screen
-        name="EditVehicle"
-        component={EditVehicleView}
-        options={{ title: "Edit Vehicle" }}
-      />
-      <Stack.Screen
-        name="OrderDetail"
-        component={OrderDetailView}
-        options={{ title: "Order Detail" }}
-      />
-      <Stack.Screen
-        name="Login"
-        component={LoginView}
-        options={{ title: "Log in" }}
-      />
-    </Stack.Navigator>
+    </Tab.Navigator>
   )
 }
+
 export default MainView
