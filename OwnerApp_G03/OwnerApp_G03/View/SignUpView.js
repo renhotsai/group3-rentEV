@@ -5,7 +5,7 @@ import { addUser } from "../Controller/fireDBHelper";
 import { auth } from "../firebaseConfig";
 import { styles } from "./styles";
 
-const SignUpView = (props) => {
+const SignUpView = ({navigation, route}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
@@ -13,12 +13,13 @@ const SignUpView = (props) => {
     const [name, setName] = useState("");
     
     const onCancelClicked = () => {
-            props.changeScreen("Login");
+      navigation.navigate("Login");
     }
 
   const onSignUpClicked = () => {
     signup(email, password)
-      .then(() => {
+      .then((response) => {
+        console.log(response);
         const newUser = {
           address: address,
           carList: [],
@@ -28,11 +29,22 @@ const SignUpView = (props) => {
           phone: phone,
         };
 
-        addUser(newUser, "Owners")
+        addUser(newUser, "Owners").then((response) => {
+          if (response){
+            setEmail("")
+            setAddress("")
+            setName("")
+            setPassword("")
+            setPhone("")
+            navigation.navigate("Main");
+          }
+        })
+        
       })
       .catch((error) => {
         console.error("Error signing up:", error);
       });
+
   };
 
   return (
