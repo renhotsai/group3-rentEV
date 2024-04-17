@@ -51,18 +51,10 @@ const MainView = ({ navigation }) => {
           ),
         }}
       />
-      {/* <Tab.Screen name="Profile" component={ProfileView} /> */}
       
       <Tab.Screen
         name="Profile"
         component={ProfileView}
-        initialParams={{ changeScreen: null }} // Initialize changeScreen prop
-        listeners={({ navigation }) => ({
-          tabPress: (event) => {
-            // Pass the changeScreen function to ProfileView when tab is pressed
-            navigation.setParams({ changeScreen: navigation.changeScreen });
-          },
-        })}
       />
     </Tab.Navigator>
   )
